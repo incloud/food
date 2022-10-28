@@ -1,0 +1,7 @@
+databaseChangeLog:
+- include:
+    file: db/changelog/001-initial.yaml
+- include:
+    file: db/changelog/002-event-description.yaml
+- include:
+    file: db/changelog/003-site-teams-webhook-url.yaml

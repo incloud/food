@@ -1,0 +1,18 @@
+query events($site: ID!, $name: String, $offset: Int) {
+  events(site: $site, name: $name, offset: $offset) {
+    id
+    name
+    createdAt
+    active
+    createdBy {
+      id
+      firstName
+      lastName
+      avatarUrl
+    }
+    restaurant {
+      id
+      name
+    }
+  }
+}

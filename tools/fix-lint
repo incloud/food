@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker-compose exec backend gradle ktlintFormat
+docker-compose exec frontend npx prettier --write .
+docker-compose exec frontend npx eslint --fix src/**/*.ts{,x}

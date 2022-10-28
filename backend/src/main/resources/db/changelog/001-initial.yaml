@@ -1,0 +1,420 @@
+databaseChangeLog:
+- changeSet:
+    id: 1653404554406-1
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: eventPK
+            name: id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: active
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: created_at
+            type: BIGINT
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: created_by_id
+            type: BINARY(16)
+        - column:
+            name: lottery_winner_id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: restaurant_id
+            type: BINARY(16)
+        - column:
+            name: updated_by_id
+            type: BINARY(16)
+        tableName: event
+- changeSet:
+    id: 1653404554406-2
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: event_orderPK
+            name: id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: available_for_lottery
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: created_at
+            type: BIGINT
+        - column:
+            name: text
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: created_by_id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: event_id
+            type: BINARY(16)
+        tableName: event_order
+- changeSet:
+    id: 1653404554406-3
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: restaurantPK
+            name: id
+            type: BINARY(16)
+        - column:
+            name: address
+            type: VARCHAR(255)
+        - column:
+            name: comment
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: created_at
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: deleted
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: delivery
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: phone
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: BIGINT
+        - column:
+            name: website
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: created_by_id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: site_id
+            type: BINARY(16)
+        - column:
+            name: updated_by_id
+            type: BINARY(16)
+        tableName: restaurant
+- changeSet:
+    id: 1653404554406-4
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: sitePK
+            name: id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        tableName: site
+- changeSet:
+    id: 1653404554406-5
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: userPK
+            name: id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: last_name
+            type: VARCHAR(255)
+        - column:
+            name: site_id
+            type: BINARY(16)
+        tableName: user
+- changeSet:
+    id: 1653404554406-6
+    author: root (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_EVENTID_COL
+        tableName: event
+- changeSet:
+    id: 1653404554406-7
+    author: root (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_EVENT_ORDERID_COL
+        tableName: event_order
+- changeSet:
+    id: 1653404554406-8
+    author: root (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_RESTAURANTID_COL
+        tableName: restaurant
+- changeSet:
+    id: 1653404554406-9
+    author: root (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_SITEID_COL
+        tableName: site
+- changeSet:
+    id: 1653404554406-10
+    author: root (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_USERID_COL
+        tableName: user
+- changeSet:
+    id: 1653404554406-11
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: site_id
+        baseTableName: user
+        constraintName: FK3slwtr3cd8i4fx6lsia0mi8yt
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: site
+        validate: true
+- changeSet:
+    id: 1653404554406-12
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by_id
+        baseTableName: restaurant
+        constraintName: FK3x87yuayisdbafu248tlpsf28
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+- changeSet:
+    id: 1653404554406-13
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: updated_by_id
+        baseTableName: event
+        constraintName: FK46h4cau36d72j0e5jyc92fhna
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+- changeSet:
+    id: 1653404554406-14
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: updated_by_id
+        baseTableName: restaurant
+        constraintName: FKe6645lolmgdwx2o9bbtyt8neu
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+- changeSet:
+    id: 1653404554406-15
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by_id
+        baseTableName: event_order
+        constraintName: FKj36q5qcmdu486l9fn4doj5bd7
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+- changeSet:
+    id: 1653404554406-16
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: event_id
+        baseTableName: event_order
+        constraintName: FKkhv9ktv17kjus4om0p2lr19od
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: event
+        validate: true
+- changeSet:
+    id: 1653404554406-17
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by_id
+        baseTableName: event
+        constraintName: FKq3996i0k49tb22i7iyhrwhbrp
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+- changeSet:
+    id: 1653404554406-18
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: site_id
+        baseTableName: restaurant
+        constraintName: FKr3cklk6bgg6ehiaxl2fjnmw5x
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: site
+        validate: true
+- changeSet:
+    id: 1653404554406-19
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: restaurant_id
+        baseTableName: event
+        constraintName: FKrgu130w46mhdumw9oh9i6372h
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: restaurant
+        validate: true
+- changeSet:
+    id: 1653404554406-20
+    author: root (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: lottery_winner_id
+        baseTableName: event
+        constraintName: FKsi41ddgh1iafnhmmykat2po5u
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+
+- changeSet:
+    id: 1653404627022-1
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: address
+          tableName: restaurant
+- changeSet:
+    id: 1653404627022-2
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: comment
+          tableName: restaurant
+- changeSet:
+    id: 1653404627022-3
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: name
+          tableName: event
+- changeSet:
+    id: 1653404627022-4
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: phone
+          tableName: restaurant
+- changeSet:
+    id: 1653404627022-5
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: text
+          tableName: event_order
+- changeSet:
+    id: 1653404627022-6
+    author: root (generated)
+    changes:
+      - dropDefaultValue:
+          columnDataType: varchar(255)
+          columnName: website
+          tableName: restaurant
+

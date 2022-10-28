@@ -1,0 +1,11 @@
+mutation updateEventOrder(
+  $id: ID!
+  $text: String!
+  $availableForLottery: Boolean!
+) {
+  updateEventOrder(
+    input: { id: $id, text: $text, availableForLottery: $availableForLottery }
+  ) {
+    id
+  }
+}

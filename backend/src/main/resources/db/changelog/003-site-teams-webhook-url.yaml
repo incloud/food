@@ -1,0 +1,11 @@
+databaseChangeLog:
+- changeSet:
+    id: 1666885178860-8
+    author: root (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: teams_webhook_url
+            type: varchar(255)
+        tableName: site

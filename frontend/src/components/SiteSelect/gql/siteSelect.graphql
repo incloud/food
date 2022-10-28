@@ -1,0 +1,6 @@
+query siteSelect {
+  sites {
+    id
+    name
+  }
+}

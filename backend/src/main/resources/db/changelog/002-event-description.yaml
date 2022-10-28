@@ -1,0 +1,11 @@
+databaseChangeLog:
+- changeSet:
+    id: 1654007147432-7
+    author: root (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: description
+            type: varchar(255)
+        tableName: event

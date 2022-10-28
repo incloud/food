@@ -1,0 +1,8 @@
+query restaurants($site: ID!, $name: String) {
+  restaurants(site: $site, name: $name) {
+    id
+    name
+    address
+    website
+  }
+}

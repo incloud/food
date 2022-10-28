@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  db:
+    image: mariadb:10.5.4
+    ports:
+    - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+
+  backend:
+    build:
+      context: .
+      target: backend-build
+    ports:
+    - 8080:8080
+    - 5005:5005
+    command: gradle bootRun --warn
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: db
+      DATABASE_PASSWORD: root
+      DATABASE_USER: root
+      SPRING_JPA_SHOW_SQL: 'true'
+      SPRING_PROFILES_ACTIVE: dev
+    volumes:
+    - ./backend:/var/app/backend
+
+  frontend:
+    build:
+      context: .
+      target: frontend-build
+    command: npm run start
+    environment:
+      CI: 'true' # https://github.com/facebook/create-react-app/issues/8688
+    ports:
+    - 3000:3000
+    volumes:
+    - ./frontend:/var/app/frontend
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+    - 8025:8025

@@ -1,0 +1,5 @@
+mutation updateRestaurant($input: UpdateRestaurantMutationInput!) {
+  updateRestaurant(input: $input) {
+    id
+  }
+}

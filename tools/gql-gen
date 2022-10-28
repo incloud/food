@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker-compose exec \
+  backend \
+  gradle graphqlGenerateSDL
+
+cp backend/build/schema.graphql frontend/schema.graphql
+
+docker-compose exec frontend npm run gql-gen
+
+docker-compose restart frontend

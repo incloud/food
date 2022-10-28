@@ -1,0 +1,3 @@
+mutation deleteEventOrder($id: ID!) {
+  deleteEventOrder(id: $id)
+}

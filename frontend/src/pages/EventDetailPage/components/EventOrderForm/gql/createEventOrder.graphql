@@ -1,0 +1,15 @@
+mutation createEventOrder(
+  $event: ID!
+  $text: String!
+  $availableForLottery: Boolean!
+) {
+  createEventOrder(
+    input: {
+      event: $event
+      text: $text
+      availableForLottery: $availableForLottery
+    }
+  ) {
+    id
+  }
+}

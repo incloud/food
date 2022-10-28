@@ -1,0 +1,5 @@
+mutation startEventLottery($id: ID!) {
+  startEventLottery(id: $id) {
+    id
+  }
+}

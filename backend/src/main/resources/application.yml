@@ -1,0 +1,41 @@
+server:
+  forward-headers-strategy: native
+
+spring:
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DATABASE_HOST}:${DATABASE_PORT:3306}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddlAuto: validate
+  mail:
+    host: mail
+    port: 1025
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          oidc:
+            scope: openid,profile,email
+            # client-id: XXX
+            # client-secret: XXX
+        provider:
+          oidc:
+            # issuer-uri: https://login.microsoftonline.com/XXX/v2.0
+
+graphql:
+  packages:
+  - de.incloud.food
+  - graphql.scalars
+
+logging:
+  level:
+    root: WARN

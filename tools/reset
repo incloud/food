@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker-compose exec \
+  -e SPRING_JPA_HIBERNATE_DDLAUTO=create \
+  backend \
+  sh -c 'java -jar build/libs/food-0.0.1-SNAPSHOT.jar fixtures:load'

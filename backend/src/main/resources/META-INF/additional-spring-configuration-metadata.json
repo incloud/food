@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "webhook.url",
+      "type": "java.lang.String",
+      "description": "The URL under which the webhook is accessible."
+    }
+  ]
+}

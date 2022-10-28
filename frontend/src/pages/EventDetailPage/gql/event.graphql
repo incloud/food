@@ -1,0 +1,49 @@
+query event($id: ID!) {
+  event(id: $id) {
+    id
+    name
+    description
+    active
+    createdAt
+    updatedAt
+    restaurant {
+      id
+      name
+      address
+      website
+      phone
+      deleted
+      delivery
+      comment
+      site {
+        id
+        name
+      }
+    }
+    createdBy {
+      id
+      fullName
+      avatarUrl
+    }
+    updatedBy {
+      id
+      fullName
+      avatarUrl
+    }
+    lotteryWinner {
+      id
+      fullName
+      avatarUrl
+    }
+    orders {
+      id
+      text
+      availableForLottery
+      createdBy {
+        id
+        fullName
+        avatarUrl
+      }
+    }
+  }
+}

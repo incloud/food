@@ -1,0 +1,6 @@
+query restaurantSelect($site: ID!) {
+  restaurants(site: $site) {
+    id
+    name
+  }
+}

@@ -1,0 +1,10 @@
+mutation updateUserSite($id: ID!) {
+  updateUserSite(id: $id) {
+    id
+    fullName
+    avatarUrl
+    site {
+      id
+    }
+  }
+}
