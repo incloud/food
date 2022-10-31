@@ -92,7 +92,8 @@ class TeamsNotificationService {
 
     val phone = restaurant.phone
     if (phone != null) {
-      factSet.facts.add(Fact("Phone", if (phone.startsWith('+')) "[$phone](tel:$phone)" else phone))
+      val filteredPhone = phone.filter { !it.isWhitespace() }
+      factSet.facts.add(Fact("Phone", if (phone.startsWith('+')) "[$phone](tel:$filteredPhone)" else phone))
     }
 
     val website = restaurant.website
