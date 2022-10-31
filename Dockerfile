@@ -44,6 +44,6 @@ RUN gradle bootJar
 
 FROM amazoncorretto:17.0.5-alpine3.16
 WORKDIR /var/app
-COPY --from=backend-jar /var/app/backend/build/libs/*.jar app.jar
+COPY --from=backend-jar /var/app/backend/build/libs/food-0.0.1-SNAPSHOT.jar app.jar
 USER 2000:2000
 CMD ["java", "-jar", "app.jar"]

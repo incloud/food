@@ -53,8 +53,6 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: management
-            # Remove once we are at k8s v1.18 and startup probes work:
-            initialDelaySeconds: 300
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
@@ -64,8 +62,6 @@ spec:
                 name: {{ include "food.fullname" . }}
             - secretRef:
                 name: {{ include "food.fullname" . }}
-            - secretRef:
-                name: database
             {{- range $name := .Values.existingSecrets }}
             - secretRef:
                 name: {{ $name }}
