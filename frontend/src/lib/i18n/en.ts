@@ -110,7 +110,7 @@ export const en = {
         },
       },
       restaurantList: {
-        createRestaurantButton: '$t(common.restaurant) erstellen',
+        createRestaurantButton: 'Create $t(common.restaurant)',
       },
     },
   },

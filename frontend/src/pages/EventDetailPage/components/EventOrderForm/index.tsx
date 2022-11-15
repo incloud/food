@@ -64,7 +64,7 @@ export const EventOrderForm: FunctionComponent<{
           rules={[
             {
               required: true,
-              message: t('pages.events.eventDetail.textRequiredMessage'),
+              message: t('pages.events.eventDetail.eventOrderForm.textRequiredMessage'),
             },
           ]}
         >
