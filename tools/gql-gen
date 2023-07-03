@@ -2,12 +2,12 @@
 
 set -e
 
-docker-compose exec \
+docker compose exec \
   backend \
   gradle graphqlGenerateSDL
 
 cp backend/build/schema.graphql frontend/schema.graphql
 
-docker-compose exec frontend npm run gql-gen
+docker compose exec frontend npm run gql-gen
 
-docker-compose restart frontend
+docker compose restart frontend
