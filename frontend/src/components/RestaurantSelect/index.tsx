@@ -1,14 +1,17 @@
-import { Select } from 'antd';
-
-import { useRestaurantSelectQuery } from './gql/restaurantSelect.generated';
-import { SelectProps } from 'antd/lib/select';
-import { useTranslation } from 'react-i18next';
-import { useCurrentUserQuery } from '../../gql/user.generated';
+import { Select } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useRestaurantSelectQuery } from './gql/restaurantSelect.generated';
+import { useCurrentUserQuery } from '~/gql/user.generated';
 
-export const RestaurantSelect: FunctionComponent<
-  SelectProps<string>
-> = props => {
+interface IRestaurantSelectProps {
+  registerOptions: UseFormRegisterReturn<'restaurant'>;
+}
+
+export const RestaurantSelect: FunctionComponent<IRestaurantSelectProps> = ({
+  registerOptions,
+}) => {
   const { t } = useTranslation();
   const { data: userData } = useCurrentUserQuery();
   const { data, loading } = useRestaurantSelectQuery({
@@ -18,17 +21,14 @@ export const RestaurantSelect: FunctionComponent<
   });
   return (
     <Select
-      showSearch
       placeholder={t('components.restaurantSelect.dropdownPlaceholder')}
-      optionFilterProp="children"
-      loading={loading}
       disabled={loading}
-      {...props}
+      {...registerOptions}
     >
       {data?.restaurants.map(restaurant => (
-        <Select.Option value={restaurant.id} key={restaurant.id}>
+        <option value={restaurant.id} key={restaurant.id}>
           {restaurant.name}
-        </Select.Option>
+        </option>
       ))}
     </Select>
   );

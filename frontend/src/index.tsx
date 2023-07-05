@@ -1,14 +1,14 @@
-import * as serviceWorker from './serviceWorker';
 import { ApolloProvider } from '@apollo/client';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { paths } from './lib/paths';
+import { Error404Page } from './components/Error/Error404Page';
 import { apolloClient } from './lib/apolloClient';
+import { paths } from './lib/paths';
+// import * as serviceWorker from './serviceWorker';
 import './lib/i18n';
 import { RestaurantsPage } from './pages/RestaurantsPage';
-import { Error404Page } from './components/Error/Error404Page';
-import { HomePage } from 'pages/HomePage';
-import { EventDetailPage } from 'pages/EventDetailPage';
-import { createRoot } from 'react-dom/client';
+import { EventDetailPage } from '~/pages/EventDetailPage';
+import { HomePage } from '~/pages/HomePage';
 
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -35,4 +35,4 @@ root.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();

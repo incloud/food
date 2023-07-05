@@ -1,28 +1,48 @@
-import { Alert, Button, Form, Input, Switch } from 'antd';
-
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import {
-  ICreateEventMutationVariables,
-  useCreateEventMutation,
-} from './gql/createEvent.generated';
-import { RestaurantSelect } from '../RestaurantSelect';
-import {
-  IUpdateEventMutationVariables,
-  useUpdateEventMutation,
-} from './gql/updateEvent.generated';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Textarea,
+  VStack,
+  Alert,
+  AlertTitle,
+  AlertIcon,
+  AlertDescription,
+  Box,
+  SystemStyleObject,
+  ButtonGroup,
+} from '@chakra-ui/react';
+import { FunctionComponent, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FunctionComponent } from 'react';
-import { Fragment } from 'react';
+import { RestaurantSelect } from '../RestaurantSelect';
+import { useCreateEventMutation } from './gql/createEvent.generated';
+import { useUpdateEventMutation } from './gql/updateEvent.generated';
 import {
   ICreateEventMutationInput,
   IUpdateEventMutationInput,
-} from 'types.generated';
+} from '~/types.generated';
 
-export const EventForm: FunctionComponent<{
+const formStyle: SystemStyleObject = {
+  '.eventForm': {
+    width: '100%',
+  },
+};
+
+interface IEventFormProps {
   onFinish: () => void;
   onCancel?: () => void;
   initialValues?: IUpdateEventMutationInput;
-}> = ({ onFinish, onCancel, initialValues }) => {
+}
+
+export const EventForm: FunctionComponent<IEventFormProps> = ({
+  onFinish,
+  onCancel,
+  initialValues,
+}) => {
   const { t } = useTranslation();
   const [addEvent, { loading: createLoading, error: createError }] =
     useCreateEventMutation();
@@ -31,105 +51,78 @@ export const EventForm: FunctionComponent<{
   const error = createError || updateError;
   const loading = createLoading || updateLoading;
 
+  const { register, handleSubmit } = useForm<
+    IUpdateEventMutationInput | ICreateEventMutationInput
+  >({ defaultValues: initialValues });
+
+  const handleEventFormFinish = useCallback(
+    async (values: IUpdateEventMutationInput | ICreateEventMutationInput) => {
+      if (initialValues != null) {
+        await updateEvent({
+          variables: {
+            input: {
+              ...values,
+              active: initialValues.active,
+              id: initialValues.id,
+            },
+          },
+        });
+      } else {
+        await addEvent({
+          variables: {
+            input: values,
+          },
+        });
+      }
+      onFinish();
+    },
+    [addEvent, initialValues, onFinish, updateEvent],
+  );
+
   return (
-    <Fragment>
+    <Box width="100%" sx={formStyle}>
       {error && (
-        <Alert
-          message={t('common.errors.unknown.message')}
-          description={t('common.errors.unknown.description')}
-          type="error"
-          showIcon
-          closable
-        />
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('common.errors.unknown.message')}</AlertTitle>
+          <AlertDescription>
+            {t('common.errors.unknown.description')}
+          </AlertDescription>
+        </Alert>
       )}
-      <Form<IUpdateEventMutationInput | ICreateEventMutationInput>
-        initialValues={initialValues}
-        onFinish={async values => {
-          if (initialValues) {
-            await updateEvent({
-              variables: {
-                input: {
-                  ...(values as IUpdateEventMutationInput),
-                  id: initialValues.id,
-                },
-              },
-            });
-          } else {
-            await addEvent({
-              variables: {
-                input: values,
-              },
-            });
-          }
-          onFinish();
-        }}
-        layout="vertical"
+      <form
+        className="eventForm"
+        onSubmit={handleSubmit(handleEventFormFinish)}
       >
-        <Form.Item
-          label={t('pages.events.eventForm.nameLabel')}
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: t('pages.events.eventForm.nameRequiredMessage'),
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={t('pages.events.eventForm.description')}
-          name="description"
-        >
-          <Input.TextArea />
-        </Form.Item>
-
-        <Form.Item
-          label={t('pages.events.eventForm.restaurantLabel')}
-          name="restaurant"
-          rules={[
-            {
-              required: true,
-              message: t('pages.events.eventForm.restaurantRequiredMessage'),
-            },
-          ]}
-        >
-          <RestaurantSelect />
-        </Form.Item>
-
-        {initialValues && (
-          <Form.Item
-            label={t('pages.events.eventForm.activeLabel')}
-            name="active"
-            valuePropName="checked"
-          >
-            <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
-            />
-          </Form.Item>
-        )}
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={loading}
-            loading={loading}
-          >
-            {t('common.buttons.submit')}
-          </Button>
-          {onCancel && (
-            <Fragment>
-              {' '}
-              <Button onClick={onCancel} disabled={loading}>
-                {t('common.buttons.cancel')}
-              </Button>
-            </Fragment>
-          )}
-        </Form.Item>
-      </Form>
-    </Fragment>
+        <VStack alignItems="start">
+          <FormControl isRequired={true}>
+            <FormLabel>{t('pages.events.eventForm.nameLabel')}</FormLabel>
+            <Input {...register('name')} />
+            <FormErrorMessage>
+              {t('pages.events.eventForm.nameRequiredMessage')}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <FormLabel>{t('pages.events.eventForm.description')}</FormLabel>
+            <Textarea {...register('description')} />
+          </FormControl>
+          <FormControl isRequired={true}>
+            <FormLabel>{t('pages.events.eventForm.restaurantLabel')}</FormLabel>
+            <RestaurantSelect registerOptions={register('restaurant')} />
+            <FormErrorMessage>
+              {t('pages.events.eventForm.restaurantRequiredMessage')}
+            </FormErrorMessage>
+          </FormControl>
+          <ButtonGroup>
+            <Button colorScheme="brand" isLoading={loading} type="submit">
+              {t('common.buttons.submit')}
+            </Button>
+            <Button onClick={onCancel} disabled={loading}>
+              {t('common.buttons.cancel')}
+            </Button>
+          </ButtonGroup>
+        </VStack>
+      </form>
+    </Box>
   );
 };

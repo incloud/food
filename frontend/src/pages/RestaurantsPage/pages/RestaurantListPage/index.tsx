@@ -1,15 +1,32 @@
+import { SearchOutlined } from '@ant-design/icons';
+import {
+  Input,
+  VStack,
+  Button,
+  InputGroup,
+  InputRightAddon,
+  Box,
+  Divider,
+  TableContainer,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Link,
+} from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
-import { DefaultLayout } from 'components/DefaultLayout';
-import { ErrorUnknownPage } from 'components/Error/ErrorUnknownPage';
-import { Button, Col, Input, Row, Table } from 'antd';
-import { useDebounce } from 'lib/hooks/useDebounce';
-import { defaultChildBottomMargin, defaultGutter } from 'lib/styles';
 import { useTranslation } from 'react-i18next';
-import { useCurrentUserQuery } from 'gql/user.generated';
+import { Link as RouterLink } from 'react-router-dom';
 import { useRestaurantsQuery } from './gql/restaurants.generated';
-import { paths } from 'lib/paths';
-import { Link } from 'react-router-dom';
-import { RestaurantForm } from 'pages/RestaurantsPage/components/RestaurantForm';
+import { DefaultLayout } from '~/components/DefaultLayout';
+import { ErrorUnknownPage } from '~/components/Error/ErrorUnknownPage';
+import { PageTitle } from '~/components/PageTitle';
+import { useCurrentUserQuery } from '~/gql/user.generated';
+import { useDebounce } from '~/lib/hooks/useDebounce';
+import { paths } from '~/lib/paths';
+import { RestaurantForm } from '~/pages/RestaurantsPage/components/RestaurantForm';
 
 export const RestaurantListPage: FunctionComponent = () => {
   const { t } = useTranslation();
@@ -18,7 +35,7 @@ export const RestaurantListPage: FunctionComponent = () => {
   const searchNameDebounced = useDebounce(searchName);
   const [createFormOpen, setCreateFormOpen] = useState(false);
   const { data: userData } = useCurrentUserQuery();
-  const { data, loading, error, refetch } = useRestaurantsQuery({
+  const { data, /*loading,*/ error, refetch } = useRestaurantsQuery({
     variables: {
       site: userData?.user.site?.id || '',
       name: searchNameDebounced || null,
@@ -34,70 +51,79 @@ export const RestaurantListPage: FunctionComponent = () => {
 
   return (
     <DefaultLayout>
-      <Row
-        justify="space-between"
-        gutter={defaultGutter}
-        css={defaultChildBottomMargin}
-      >
-        <Col flex={3}>
-          <h2>{t('common.restaurant_plural')}</h2>
-        </Col>
-        <Col>
-          <Input.Search
-            placeholder={t('common.name')}
-            value={searchName}
-            onChange={e => setSearchName(e.target.value)}
-            loading={loading && !!searchName}
-          />
-        </Col>
-        {!createFormOpen && (
-          <Col>
-            <Button type="primary" onClick={() => setCreateFormOpen(true)}>
-              {t('pages.restaurantList.createRestaurantButton')}
-            </Button>
-          </Col>
+      <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
+        <PageTitle title={t('common.restaurant_plural')}>
+          <InputGroup>
+            <Input
+              placeholder={t('common.name')}
+              value={searchName}
+              onChange={e => setSearchName(e.target.value)}
+            />
+            <InputRightAddon>
+              <SearchOutlined />
+            </InputRightAddon>
+          </InputGroup>
+          {!createFormOpen && (
+            <Box>
+              <Button
+                colorScheme="brand"
+                onClick={() => setCreateFormOpen(true)}
+              >
+                {t('pages.restaurantList.createRestaurantButton')}
+              </Button>
+            </Box>
+          )}
+        </PageTitle>
+
+        {createFormOpen && (
+          <>
+            <RestaurantForm
+              onFinish={() => {
+                setCreateFormOpen(false);
+                void refetch();
+              }}
+              onCancel={() => setCreateFormOpen(false)}
+            />
+            <Divider />
+          </>
         )}
-      </Row>
 
-      {createFormOpen && (
-        <RestaurantForm
-          onFinish={() => {
-            setCreateFormOpen(false);
-            refetch();
-          }}
-          onCancel={() => setCreateFormOpen(false)}
-        />
-      )}
-
-      <Table
-        columns={[
-          {
-            title: t('common.name').toString(),
-            dataIndex: 'name',
-            render: (value: string, record) => (
-              <Link to={paths.restaurant(record.id)}>{value}</Link>
-            ),
-          },
-          {
-            title: t('common.restaurantDescription.address').toString(),
-            dataIndex: 'address',
-            render: (value: string | null) => value?.split('\n').join(', '),
-          },
-          {
-            title: t('common.restaurantDescription.website').toString(),
-            dataIndex: 'website',
-            render: (value: string) => (
-              <a href={value} rel="noopener noreferrer" target="_blank">
-                {value}
-              </a>
-            ),
-          },
-        ]}
-        rowKey="id"
-        dataSource={data?.restaurants}
-        loading={loading}
-        scroll={{ x: true }}
-      />
+        <TableContainer width="100%">
+          <Table variant="striped" size="lg">
+            <Thead>
+              <Tr>
+                <Th>{t('common.name')}</Th>
+                <Th>{t('common.restaurantDescription.address')}</Th>
+                <Th>{t('common.restaurantDescription.website')}</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data?.restaurants.map(item => (
+                <Tr>
+                  <Td>
+                    <Link as={RouterLink} to={paths.restaurant(item.id)}>
+                      {item.name}
+                    </Link>
+                  </Td>
+                  <Td>{item.address?.split('\n').join(', ')}</Td>
+                  <Td>
+                    {item.website != null && (
+                      <Link
+                        isExternal={true}
+                        href={item.website}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {item.website}
+                      </Link>
+                    )}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </VStack>
     </DefaultLayout>
   );
 };

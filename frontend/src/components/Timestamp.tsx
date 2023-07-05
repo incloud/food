@@ -1,5 +1,4 @@
-import { Fragment } from 'react';
-import { FunctionComponent } from 'react';
+import { Fragment, FunctionComponent } from 'react';
 
 const options: Intl.DateTimeFormatOptions = {
   year: 'numeric',

@@ -55,8 +55,6 @@ dependencies {
   liquibaseRuntime("org.mariadb.jdbc:mariadb-java-client")
   liquibaseRuntime("org.liquibase.ext:liquibase-hibernate5:4.17.0")
   liquibaseRuntime("info.picocli:picocli:4.6.3")
-  liquibaseRuntime(sourceSets.getByName("main").compileClasspath)
-  liquibaseRuntime(sourceSets.getByName("main").runtimeClasspath)
   liquibaseRuntime(sourceSets.getByName("main").output)
 }
 
@@ -76,6 +74,9 @@ tasks.withType<KotlinCompile> {
 // }
 
 configurations {
+  liquibaseRuntime {
+    extendsFrom(configurations.compileClasspath.get())
+  }
   liquibase {
     activities.register("main")
     runList = "main"

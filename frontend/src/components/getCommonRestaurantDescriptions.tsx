@@ -1,12 +1,11 @@
 import { LinkOutlined, PhoneOutlined } from '@ant-design/icons';
-import { css } from '@emotion/react';
-import { Descriptions } from 'antd';
-import { paths } from 'lib/paths';
+import { Link } from '@chakra-ui/react';
 import { TFunction } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { IRestaurant, ISite } from 'types.generated';
+import { Link as RouterLink } from 'react-router-dom';
 import { GreenCheckMark, RedStopSign } from './Icons';
-import { Fragment } from 'react';
+import { DescriptionItem } from '~/components/DescriptionItem';
+import { paths } from '~/lib/paths';
+import { IRestaurant, ISite } from '~/types.generated';
 
 // Workaround for FunctionComponents not allowing array return values
 export const getCommonRestaurantDescriptions = ({
@@ -25,93 +24,90 @@ export const getCommonRestaurantDescriptions = ({
 }) => {
   const items = showName
     ? [
-        <Descriptions.Item key="name" label={t('common.restaurant')}>
-          <Link to={paths.restaurant(restaurant.id)}>
+        <DescriptionItem key="name" label={t('common.restaurant')}>
+          <Link
+            colorScheme="brand"
+            as={RouterLink}
+            to={paths.restaurant(restaurant.id)}
+          >
             <strong>{restaurant.name}</strong>
           </Link>
-        </Descriptions.Item>,
+        </DescriptionItem>,
       ]
     : [];
 
   if (restaurant.website) {
     items.push(
-      <Descriptions.Item
+      <DescriptionItem
         key="name"
         label={t('common.restaurantDescription.website')}
       >
         <LinkOutlined />{' '}
-        <a href={restaurant.website} target="_blank" rel="noopener noreferrer">
+        <Link
+          isExternal={true}
+          href={restaurant.website}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {restaurant.website}
-        </a>
-      </Descriptions.Item>,
+        </Link>
+      </DescriptionItem>,
     );
   }
 
   if (restaurant.phone) {
     items.push(
-      <Descriptions.Item
+      <DescriptionItem
         key="phone"
         label={t('common.restaurantDescription.phone')}
       >
         <PhoneOutlined />{' '}
         <a href={`tel:${restaurant.phone}`}>{restaurant.phone}</a>
-      </Descriptions.Item>,
+      </DescriptionItem>,
     );
   }
 
   if (restaurant.address) {
     items.push(
-      <Descriptions.Item
+      <DescriptionItem
         key="address"
         label={t('common.restaurantDescription.address')}
       >
-        <address
-          css={css`
-            white-space: pre-wrap;
-          `}
-        >
-          {restaurant.address}
-        </address>
-      </Descriptions.Item>,
+        <address>{restaurant.address}</address>
+      </DescriptionItem>,
     );
   }
 
   if (restaurant.comment) {
     items.push(
-      <Descriptions.Item
+      <DescriptionItem
         key="comment"
         label={t('common.restaurantDescription.comment')}
       >
-        <span
-          css={css`
-            white-space: pre-wrap;
-          `}
-        >
-          {restaurant.comment}
-        </span>
-      </Descriptions.Item>,
+        <span>{restaurant.comment}</span>
+      </DescriptionItem>,
     );
   }
 
   items.push(
     ...[
-      <Descriptions.Item key="site" label={t('common.site')}>
+      <DescriptionItem key="site" label={t('common.site')}>
         {restaurant.site.name}
-      </Descriptions.Item>,
-      <Descriptions.Item
+      </DescriptionItem>,
+      <DescriptionItem
         key="delivery"
         label={t('common.restaurantDescription.delivery')}
       >
         {restaurant.delivery ? (
-          <Fragment>
+          <>
             <GreenCheckMark /> {t('common.yes')}
-          </Fragment>
+          </>
         ) : (
-          <Fragment>
+          <>
             <RedStopSign /> {t('common.no')}
-          </Fragment>
+          </>
         )}
-      </Descriptions.Item>,
+      </DescriptionItem>,
     ],
   );
 

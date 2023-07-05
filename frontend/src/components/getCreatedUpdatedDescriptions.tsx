@@ -1,14 +1,8 @@
-import { css } from '@emotion/react';
-import { Avatar, Descriptions } from 'antd';
+import { Avatar, Box, HStack } from '@chakra-ui/react';
 import { TFunction } from 'react-i18next';
-import { IUser } from 'types.generated';
 import { Timestamp } from './Timestamp';
-
-const marginStyle = css`
-  div:not(:last-child) {
-    margin-bottom: 0.5em;
-  }
-`;
+import { DescriptionItem } from '~/components/DescriptionItem';
+import { IUser } from '~/types.generated';
 
 // Workaround for FunctionComponents not allowing array return values
 export const getCreatedUpdatedDescriptions = ({
@@ -25,43 +19,41 @@ export const getCreatedUpdatedDescriptions = ({
 }) => {
   const items = [];
 
-  if (entity.createdAt || entity.createdBy) {
+  if (entity.createdAt) {
     items.push(
-      <Descriptions.Item key="created" label={t('common.created')}>
-        <div css={marginStyle}>
-          {entity.createdAt && (
-            <div>
-              <Timestamp timestamp={entity.createdAt} />
-            </div>
-          )}
-          {entity.createdBy && (
-            <div>
-              <Avatar src={entity.createdBy.avatarUrl} size="small" />{' '}
-              {entity.createdBy.fullName}
-            </div>
-          )}
-        </div>
-      </Descriptions.Item>,
+      <DescriptionItem key="created" label={t('common.created')}>
+        <Timestamp timestamp={entity.createdAt} />
+      </DescriptionItem>,
     );
   }
 
-  if (entity.updatedAt || entity.updatedBy) {
+  if (entity.createdBy) {
     items.push(
-      <Descriptions.Item key="updated" label={t('common.updated')}>
-        <div css={marginStyle}>
-          {entity.updatedAt && (
-            <div>
-              <Timestamp timestamp={entity.updatedAt} />
-            </div>
-          )}
-          {entity.updatedBy && (
-            <div>
-              <Avatar src={entity.updatedBy.avatarUrl} size="small" />{' '}
-              {entity.updatedBy.fullName}
-            </div>
-          )}
-        </div>
-      </Descriptions.Item>,
+      <DescriptionItem key="created" label={t('common.createdBy')}>
+        <HStack>
+          <Avatar src={entity.createdBy.avatarUrl} size="sm" />
+          <Box>{entity.createdBy.fullName}</Box>
+        </HStack>
+      </DescriptionItem>,
+    );
+  }
+
+  if (entity.updatedAt) {
+    items.push(
+      <DescriptionItem key="updated" label={t('common.updatedAt')}>
+        <Timestamp timestamp={entity.updatedAt} />
+      </DescriptionItem>,
+    );
+  }
+
+  if (entity.updatedBy) {
+    items.push(
+      <DescriptionItem key="updated" label={t('common.updatedBy')}>
+        <HStack>
+          <Avatar src={entity.updatedBy.avatarUrl} size="sm" />
+          <Box>{entity.updatedBy.fullName}</Box>
+        </HStack>
+      </DescriptionItem>,
     );
   }
 

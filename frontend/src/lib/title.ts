@@ -9,6 +9,7 @@ const titles = [
   'Food as a Service',
 ];
 
-export const title = titles[Math.round(Math.random() * (titles.length - 1))];
+export const title =
+  titles[Math.round(Math.random() * (titles.length - 1))] ?? 'Food';
 
 document.title = title;

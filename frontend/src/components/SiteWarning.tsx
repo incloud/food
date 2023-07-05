@@ -1,8 +1,7 @@
 import { Alert } from 'antd';
-import { useCurrentUserQuery } from 'gql/user.generated';
-import { defaultBottomMargin } from 'lib/styles';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useCurrentUserQuery } from '~/gql/user.generated';
 
 export const SiteWarning: FunctionComponent<{
   siteId: string;
@@ -19,8 +18,7 @@ export const SiteWarning: FunctionComponent<{
     <Alert
       message={t('components.siteWarning', { type: t(`common.${type}`) })}
       type="warning"
-      showIcon
-      css={defaultBottomMargin}
+      showIcon={true}
     />
   );
 };

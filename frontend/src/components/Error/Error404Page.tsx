@@ -1,9 +1,9 @@
 import { Button } from 'antd';
-import { ErrorPage } from './ErrorPage';
-import { Link } from 'react-router-dom';
-import { paths } from '../../lib/paths';
-import { useTranslation } from 'react-i18next';
 import { FunctionComponent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { ErrorPage } from './ErrorPage';
+import { paths } from '~/lib/paths';
 
 export const Error404Page: FunctionComponent = () => {
   const { t } = useTranslation();

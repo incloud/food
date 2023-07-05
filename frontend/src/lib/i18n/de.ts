@@ -18,7 +18,11 @@ export const de: typeof en = {
         cancel: 'Abbrechen',
       },
       created: 'Erstellt',
-      updated: 'Zuletzt aktualisiert',
+      createdAt: '$t(common.created) um',
+      createdBy: '$t(common.created) von',
+      updated: 'Aktualisiert',
+      updatedAt: '$t(common.updated) um',
+      updatedBy: '$t(common.updated) von',
       lottery: 'Auslosung',
       event: 'Event',
       event_plural: 'Events',
@@ -75,16 +79,21 @@ export const de: typeof en = {
         },
         eventDetail: {
           eventOrderForm: {
-            textLabel: 'Text',
+            textLabel: '$t(common.order)',
             textRequiredMessage: 'Bitte gib deine $t(common.order) ein',
             availableForLotteryLabel:
               'Kannst du die $t(common.order) aufgeben? Eine Person wird zufällig ausgewählt, um die $t(common.order) aufzugeben.',
           },
           eventDescriptions: {
+            title: 'Informationen',
             statusLabel: 'Status',
             statusActive: '$t(common.event) ist aktiv',
             statusClosed: '$t(common.event) wurde bereits geschlossen',
             lotteryWinner: '{{name}} wurde zum Bestellen ausgewählt',
+            description: 'Beschreibung',
+          },
+          participantList: {
+            title: 'Teilnehmer',
           },
           errors: {
             deleteOrder: '$t(common.order) konnte nicht gelöscht werden!',
@@ -95,15 +104,19 @@ export const de: typeof en = {
           deleteOrderTitle: 'Nicht mehr hungrig?',
           deleteOrderOkButton: 'Ja',
           deleteOrderCancelButton: 'Nein',
+          editEvent: 'Event bearbeiten',
         },
         eventList: {
           title: 'Events',
           searchPlaceholder: 'Name',
           createEventButton: '$t(common.event) erstellen',
           loadMoreButton: 'Mehr laden',
+          gotoButton: 'Zum Event',
         },
       },
       restaurantDetail: {
+        edit: 'Restaurant bearbeiten',
+        delete: 'Restaurant löschen',
         deleteConfirmation: 'Wollen Sie dieses Restaurant wirklich löschen?',
         deleted: 'Dieses Restaurant wurde gelöscht!',
         deleteSuccess: {

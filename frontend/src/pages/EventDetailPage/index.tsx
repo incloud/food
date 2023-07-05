@@ -1,23 +1,53 @@
-import { DefaultLayout } from '../../components/DefaultLayout';
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { LoadingPage } from '../../components/LoadingPage';
-import { ErrorUnknownPage } from '../../components/Error/ErrorUnknownPage';
-import { Error404Page } from '../../components/Error/Error404Page';
-import { useEventQuery } from './gql/event.generated';
-import { notification, Avatar, Button, List, Popconfirm, Col, Row } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { EventOrderForm } from './components/EventOrderForm';
-import { useCurrentUserQuery } from '../../gql/user.generated';
-import { useDeleteEventOrderMutation } from './gql/deleteEventOrder.generated';
-import { useStartEventLotteryMutation } from './gql/startEventLottery.generated';
-import { GreenCheckMark, RedStopSign } from '../../components/Icons';
-import { EventDescriptions } from './components/EventDescriptions';
-import { EventForm } from '../../components/EventForm';
+import { DeleteOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  IconButton,
+  List,
+  ListItem,
+  Popover,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  Spacer,
+  VStack,
+  Text,
+} from '@chakra-ui/react';
+import { notification } from 'antd';
+import {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from 'react';
 import { useTranslation } from 'react-i18next';
-import { SiteWarning } from 'components/SiteWarning';
-import { defaultChildBottomMargin } from 'lib/styles';
-import { Fragment } from 'react';
+import { useParams } from 'react-router-dom';
+import { EventDescriptions } from './components/EventDescriptions';
+import { EventOrderForm } from './components/EventOrderForm';
+import { useDeleteEventOrderMutation } from './gql/deleteEventOrder.generated';
+import { useEventQuery } from './gql/event.generated';
+import { useStartEventLotteryMutation } from './gql/startEventLottery.generated';
+import { DefaultLayout } from '~/components/DefaultLayout';
+import { DescriptionItem } from '~/components/DescriptionItem';
+import { Error404Page } from '~/components/Error/Error404Page';
+import { ErrorUnknownPage } from '~/components/Error/ErrorUnknownPage';
+import { EventForm } from '~/components/EventForm';
+import { GreenCheckMark, RedStopSign } from '~/components/Icons';
+import { LoadingPage } from '~/components/LoadingPage';
+import { PageTitle } from '~/components/PageTitle';
+import { SiteWarning } from '~/components/SiteWarning';
+import { useCurrentUserQuery } from '~/gql/user.generated';
 
 export const EventDetailPage: FunctionComponent = () => {
   const { t } = useTranslation();
@@ -48,6 +78,22 @@ export const EventDetailPage: FunctionComponent = () => {
     }
   }, [deleteError, lotteryError, t]);
 
+  const handleLotteryStart = useCallback(
+    async (startId: string) => {
+      await startLottery({ variables: { id: startId } });
+      return refetch();
+    },
+    [refetch, startLottery],
+  );
+
+  const handleDeleteOrder = useCallback(
+    async (itemId: string) => {
+      await deleteOrder({ variables: { id: itemId } });
+      return refetch();
+    },
+    [deleteOrder, refetch],
+  );
+
   const anyoneAvailabeForLottery = useMemo(() => {
     if (!data?.event?.orders) {
       return false;
@@ -71,142 +117,206 @@ export const EventDetailPage: FunctionComponent = () => {
     <DefaultLayout>
       <SiteWarning type="event" siteId={data.event.restaurant.site.id} />
 
-      {!updateEventFormOpen ? (
-        <Fragment>
-          <Row>
-            <Col flex={3}>
-              <h2>{data.event.name}</h2>
-            </Col>
-            <Col>
-              <Button
-                icon={<EditOutlined />}
-                onClick={() => setUpdateEventFormOpen(true)}
-              />
-            </Col>
-          </Row>
-
-          <EventDescriptions event={data.event} />
-
-          {data.event.description && <p>{data.event.description}</p>}
-        </Fragment>
-      ) : (
-        <EventForm
-          initialValues={{
-            ...data.event,
-            restaurant: data.event.restaurant.id,
-          }}
-          onFinish={() => {
-            setUpdateEventFormOpen(false);
-            refetch();
-          }}
-          onCancel={() => setUpdateEventFormOpen(false)}
-        />
-      )}
-
-      {!createOrderFormOpen && !updateEventFormOpen && data.event.active && (
-        <div css={defaultChildBottomMargin}>
-          <Button type="primary" onClick={() => setCreateOrderFormOpen(true)}>
-            {t('pages.events.eventDetail.addOrder')}
-          </Button>
-          {data.event.active && (
-            <Fragment>
-              {' '}
-              <Button
-                type="default"
-                onClick={async () => {
-                  await startLottery({ variables: { id } });
-                  return refetch();
-                }}
-                loading={lotteryLoading}
-                disabled={
-                  lotteryLoading || loading || !anyoneAvailabeForLottery
-                }
-              >
-                {t('pages.events.eventDetail.startLottery')}
-              </Button>
-            </Fragment>
-          )}
-        </div>
-      )}
-
-      {createOrderFormOpen && (
-        <EventOrderForm
-          eventId={id}
-          onFinish={() => {
-            setCreateOrderFormOpen(false);
-            refetch();
-          }}
-          onCancel={() => setCreateOrderFormOpen(false)}
-        />
-      )}
-
-      <List
-        dataSource={data.event.orders}
-        loading={loading}
-        rowKey="id"
-        renderItem={item => (
-          <List.Item
-            actions={
-              item.createdBy.id === userData?.user.id && data?.event?.active
-                ? [
+      <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
+        <PageTitle title={data.event.name}>
+          <Box>
+            <Button
+              colorScheme="brand"
+              leftIcon={<EditOutlined />}
+              onClick={() => setUpdateEventFormOpen(true)}
+            >
+              {t('pages.events.eventDetail.editEvent')}
+            </Button>
+          </Box>
+        </PageTitle>
+        <Grid templateColumns="repeat(6, 1fr)" gap={6} width="100%">
+          <GridItem colSpan={4}>
+            <HStack>
+              <Box>
+                <Heading>
+                  {t('pages.events.eventDetail.participantList.title')}
+                </Heading>
+              </Box>
+              <Spacer />
+              {!createOrderFormOpen &&
+                !updateEventFormOpen &&
+                data.event.active && (
+                  <ButtonGroup>
                     <Button
-                      key={item.id}
-                      icon={<EditOutlined />}
-                      onClick={() =>
-                        setUpdateOrderId(!updateOrderId ? item.id : null)
-                      }
-                    />,
-                    <Popconfirm
-                      key={item.id}
-                      title={t('pages.events.eventDetail.deleteOrderTitle')}
-                      onConfirm={async () => {
-                        await deleteOrder({ variables: { id: item.id } });
-                        return refetch();
-                      }}
-                      okText={t('pages.events.eventDetail.deleteOrderOkButton')}
-                      cancelText={t(
-                        'pages.events.eventDetail.deleteOrderCancelButton',
-                      )}
+                      colorScheme="brand"
+                      onClick={() => setCreateOrderFormOpen(true)}
                     >
-                      <Button
-                        icon={<DeleteOutlined />}
-                        loading={deleteLoading}
-                        disabled={deleteLoading}
-                      />
-                    </Popconfirm>,
-                  ]
-                : []
-            }
-          >
-            {updateOrderId === item.id ? (
+                      {t('pages.events.eventDetail.addOrder')}
+                    </Button>
+                    {data.event.active && (
+                      <>
+                        <Button
+                          onClick={() => void handleLotteryStart(id)}
+                          isLoading={lotteryLoading}
+                          disabled={
+                            lotteryLoading ||
+                            loading ||
+                            !anyoneAvailabeForLottery
+                          }
+                        >
+                          {t('pages.events.eventDetail.startLottery')}
+                        </Button>
+                      </>
+                    )}
+                  </ButtonGroup>
+                )}
+            </HStack>
+            <Divider />
+            {createOrderFormOpen && (
               <EventOrderForm
-                orderId={item.id}
                 eventId={id}
                 onFinish={() => {
-                  setUpdateOrderId(null);
-                  refetch();
+                  setCreateOrderFormOpen(false);
+                  void refetch();
                 }}
-                initialValues={item}
-              />
-            ) : (
-              <List.Item.Meta
-                avatar={<Avatar src={item.createdBy.avatarUrl} />}
-                title={
-                  <Fragment>
-                    {item.availableForLottery ? (
-                      <GreenCheckMark />
-                    ) : (
-                      <RedStopSign />
-                    )}{' '}
-                    {item.createdBy.fullName}
-                  </Fragment>
-                }
-                description={item.text}
+                onCancel={() => setCreateOrderFormOpen(false)}
               />
             )}
-          </List.Item>
-        )}
-      />
+            <List>
+              {data.event.orders.map(item => (
+                <ListItem key={item.id}>
+                  <VStack>
+                    <Flex alignSelf="flex-end">
+                      {item.createdBy.id === userData?.user.id &&
+                        data?.event?.active && (
+                          <ButtonGroup key={item.id}>
+                            <IconButton
+                              aria-label={t('common.edit')}
+                              icon={
+                                updateOrderId === item.id ? (
+                                  <CloseOutlined />
+                                ) : (
+                                  <EditOutlined />
+                                )
+                              }
+                              onClick={() =>
+                                setUpdateOrderId(
+                                  updateOrderId == null ||
+                                    updateOrderId !== item.id
+                                    ? item.id
+                                    : null,
+                                )
+                              }
+                            />
+                            <Popover placement="bottom-end">
+                              {({ onClose }) => (
+                                <>
+                                  <PopoverTrigger>
+                                    <IconButton
+                                      aria-label={t('common.delete')}
+                                      icon={<DeleteOutlined />}
+                                      isLoading={deleteLoading}
+                                      disabled={
+                                        deleteLoading ||
+                                        updateOrderId === item.id
+                                      }
+                                    />
+                                  </PopoverTrigger>
+                                  <PopoverContent>
+                                    <PopoverCloseButton />
+                                    <PopoverHeader>
+                                      {t(
+                                        'pages.events.eventDetail.deleteOrderTitle',
+                                      )}
+                                    </PopoverHeader>
+                                    <PopoverFooter>
+                                      <ButtonGroup>
+                                        <Button onClick={onClose}>
+                                          {t(
+                                            'pages.events.eventDetail.deleteOrderCancelButton',
+                                          )}
+                                        </Button>
+                                        <Button
+                                          colorScheme="brand"
+                                          onClick={() =>
+                                            void handleDeleteOrder(item.id)
+                                          }
+                                        >
+                                          {t(
+                                            'pages.events.eventDetail.deleteOrderOkButton',
+                                          )}
+                                        </Button>
+                                      </ButtonGroup>
+                                    </PopoverFooter>
+                                  </PopoverContent>
+                                </>
+                              )}
+                            </Popover>
+                          </ButtonGroup>
+                        )}
+                    </Flex>
+                    <Box width="100%">
+                      {updateOrderId === item.id ? (
+                        <>
+                          <EventOrderForm
+                            orderId={item.id}
+                            eventId={id}
+                            onFinish={() => {
+                              setUpdateOrderId(null);
+                              void refetch();
+                            }}
+                            initialValues={item}
+                          />
+                          <Divider />
+                        </>
+                      ) : (
+                        <HStack>
+                          <Avatar src={item.createdBy.avatarUrl} size="sm" />
+                          <Box>
+                            {item.availableForLottery ? (
+                              <GreenCheckMark />
+                            ) : (
+                              <RedStopSign />
+                            )}
+                          </Box>
+                          <Box>{item.createdBy.fullName}</Box>
+                        </HStack>
+                      )}
+                    </Box>
+                    <DescriptionItem label="Bestellung" direction="column">
+                      <Text fontSize="2xl">{item.text}</Text>
+                    </DescriptionItem>
+                  </VStack>
+                </ListItem>
+              ))}
+            </List>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <VStack width="100%">
+              <Box width="100%">
+                <Heading as="h3">
+                  {t('pages.events.eventDetail.eventDescriptions.title')}
+                </Heading>
+                <Divider />
+              </Box>
+              <Box width="100%">
+                {!updateEventFormOpen ? (
+                  <>
+                    <EventDescriptions event={data.event} />
+                  </>
+                ) : (
+                  <EventForm
+                    initialValues={{
+                      ...data.event,
+                      restaurant: data.event.restaurant.id,
+                    }}
+                    onFinish={() => {
+                      setUpdateEventFormOpen(false);
+                      void refetch();
+                    }}
+                    onCancel={() => setUpdateEventFormOpen(false)}
+                  />
+                )}
+              </Box>
+            </VStack>
+          </GridItem>
+        </Grid>
+      </VStack>
     </DefaultLayout>
   );
 };

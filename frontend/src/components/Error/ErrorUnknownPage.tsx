@@ -1,7 +1,7 @@
 import { Button } from 'antd';
-import { ErrorPage } from './ErrorPage';
-import { useTranslation } from 'react-i18next';
 import { FunctionComponent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ErrorPage } from './ErrorPage';
 
 export const ErrorUnknownPage: FunctionComponent = () => {
   const { t } = useTranslation();
