@@ -116,207 +116,201 @@ export const EventDetailPage: FunctionComponent = () => {
   return (
     <DefaultLayout>
       <SiteWarning type="event" siteId={data.event.restaurant.site.id} />
-
-      <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
-        <PageTitle title={data.event.name}>
-          <Box>
-            <Button
-              colorScheme="brand"
-              leftIcon={<EditOutlined />}
-              onClick={() => setUpdateEventFormOpen(true)}
-            >
-              {t('pages.events.eventDetail.editEvent')}
-            </Button>
-          </Box>
-        </PageTitle>
-        <Grid templateColumns="repeat(6, 1fr)" gap={6} width="100%">
-          <GridItem colSpan={4}>
-            <HStack>
-              <Box>
-                <Heading>
-                  {t('pages.events.eventDetail.participantList.title')}
-                </Heading>
-              </Box>
-              <Spacer />
-              {!createOrderFormOpen &&
-                !updateEventFormOpen &&
-                data.event.active && (
-                  <ButtonGroup>
-                    <Button
-                      colorScheme="brand"
-                      onClick={() => setCreateOrderFormOpen(true)}
-                    >
-                      {t('pages.events.eventDetail.addOrder')}
-                    </Button>
-                    {data.event.active && (
-                      <>
-                        <Button
-                          onClick={() => void handleLotteryStart(id)}
-                          isLoading={lotteryLoading}
-                          disabled={
-                            lotteryLoading ||
-                            loading ||
-                            !anyoneAvailabeForLottery
-                          }
-                        >
-                          {t('pages.events.eventDetail.startLottery')}
-                        </Button>
-                      </>
-                    )}
-                  </ButtonGroup>
-                )}
-            </HStack>
-            <Divider />
-            {createOrderFormOpen && (
-              <EventOrderForm
-                eventId={id}
-                onFinish={() => {
-                  setCreateOrderFormOpen(false);
-                  void refetch();
-                }}
-                onCancel={() => setCreateOrderFormOpen(false)}
-              />
-            )}
-            <List>
-              {data.event.orders.map(item => (
-                <ListItem key={item.id}>
-                  <VStack>
-                    <Flex alignSelf="flex-end">
-                      {item.createdBy.id === userData?.user.id &&
-                        data?.event?.active && (
-                          <ButtonGroup key={item.id}>
-                            <IconButton
-                              aria-label={t('common.edit')}
-                              icon={
-                                updateOrderId === item.id ? (
-                                  <CloseOutlined />
-                                ) : (
-                                  <EditOutlined />
-                                )
-                              }
-                              onClick={() =>
-                                setUpdateOrderId(
-                                  updateOrderId == null ||
-                                    updateOrderId !== item.id
-                                    ? item.id
-                                    : null,
-                                )
-                              }
-                            />
-                            <Popover placement="bottom-end">
-                              {({ onClose }) => (
-                                <>
-                                  <PopoverTrigger>
-                                    <IconButton
-                                      aria-label={t('common.delete')}
-                                      icon={<DeleteOutlined />}
-                                      isLoading={deleteLoading}
-                                      disabled={
-                                        deleteLoading ||
-                                        updateOrderId === item.id
-                                      }
-                                    />
-                                  </PopoverTrigger>
-                                  <PopoverContent>
-                                    <PopoverCloseButton />
-                                    <PopoverHeader>
-                                      {t(
-                                        'pages.events.eventDetail.deleteOrderTitle',
-                                      )}
-                                    </PopoverHeader>
-                                    <PopoverFooter>
-                                      <ButtonGroup>
-                                        <Button onClick={onClose}>
-                                          {t(
-                                            'pages.events.eventDetail.deleteOrderCancelButton',
-                                          )}
-                                        </Button>
-                                        <Button
-                                          colorScheme="brand"
-                                          onClick={() =>
-                                            void handleDeleteOrder(item.id)
-                                          }
-                                        >
-                                          {t(
-                                            'pages.events.eventDetail.deleteOrderOkButton',
-                                          )}
-                                        </Button>
-                                      </ButtonGroup>
-                                    </PopoverFooter>
-                                  </PopoverContent>
-                                </>
-                              )}
-                            </Popover>
-                          </ButtonGroup>
-                        )}
-                    </Flex>
-                    <Box width="100%">
-                      {updateOrderId === item.id ? (
-                        <>
-                          <EventOrderForm
-                            orderId={item.id}
-                            eventId={id}
-                            onFinish={() => {
-                              setUpdateOrderId(null);
-                              void refetch();
-                            }}
-                            initialValues={item}
+      <PageTitle title={data.event.name}>
+        <Box>
+          <Button
+            colorScheme="brand"
+            leftIcon={<EditOutlined />}
+            onClick={() => setUpdateEventFormOpen(true)}
+          >
+            {t('pages.events.eventDetail.editEvent')}
+          </Button>
+        </Box>
+      </PageTitle>
+      <Grid templateColumns="repeat(6, 1fr)" gap={6} width="100%">
+        <GridItem colSpan={4}>
+          <HStack>
+            <Box>
+              <Heading>
+                {t('pages.events.eventDetail.participantList.title')}
+              </Heading>
+            </Box>
+            <Spacer />
+            {!createOrderFormOpen &&
+              !updateEventFormOpen &&
+              data.event.active && (
+                <ButtonGroup>
+                  <Button
+                    colorScheme="brand"
+                    onClick={() => setCreateOrderFormOpen(true)}
+                  >
+                    {t('pages.events.eventDetail.addOrder')}
+                  </Button>
+                  {data.event.active && (
+                    <>
+                      <Button
+                        onClick={() => void handleLotteryStart(id)}
+                        isLoading={lotteryLoading}
+                        disabled={
+                          lotteryLoading || loading || !anyoneAvailabeForLottery
+                        }
+                      >
+                        {t('pages.events.eventDetail.startLottery')}
+                      </Button>
+                    </>
+                  )}
+                </ButtonGroup>
+              )}
+          </HStack>
+          <Divider />
+          {createOrderFormOpen && (
+            <EventOrderForm
+              eventId={id}
+              onFinish={() => {
+                setCreateOrderFormOpen(false);
+                void refetch();
+              }}
+              onCancel={() => setCreateOrderFormOpen(false)}
+            />
+          )}
+          <List>
+            {data.event.orders.map(item => (
+              <ListItem key={item.id}>
+                <VStack>
+                  <Flex alignSelf="flex-end">
+                    {item.createdBy.id === userData?.user.id &&
+                      data?.event?.active && (
+                        <ButtonGroup key={item.id}>
+                          <IconButton
+                            aria-label={t('common.edit')}
+                            icon={
+                              updateOrderId === item.id ? (
+                                <CloseOutlined />
+                              ) : (
+                                <EditOutlined />
+                              )
+                            }
+                            onClick={() =>
+                              setUpdateOrderId(
+                                updateOrderId == null ||
+                                  updateOrderId !== item.id
+                                  ? item.id
+                                  : null,
+                              )
+                            }
                           />
-                          <Divider />
-                        </>
-                      ) : (
-                        <HStack>
-                          <Avatar src={item.createdBy.avatarUrl} size="sm" />
-                          <Box>
-                            {item.availableForLottery ? (
-                              <GreenCheckMark />
-                            ) : (
-                              <RedStopSign />
+                          <Popover placement="bottom-end">
+                            {({ onClose }) => (
+                              <>
+                                <PopoverTrigger>
+                                  <IconButton
+                                    aria-label={t('common.delete')}
+                                    icon={<DeleteOutlined />}
+                                    isLoading={deleteLoading}
+                                    disabled={
+                                      deleteLoading || updateOrderId === item.id
+                                    }
+                                  />
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                  <PopoverCloseButton />
+                                  <PopoverHeader>
+                                    {t(
+                                      'pages.events.eventDetail.deleteOrderTitle',
+                                    )}
+                                  </PopoverHeader>
+                                  <PopoverFooter>
+                                    <ButtonGroup>
+                                      <Button onClick={onClose}>
+                                        {t(
+                                          'pages.events.eventDetail.deleteOrderCancelButton',
+                                        )}
+                                      </Button>
+                                      <Button
+                                        colorScheme="brand"
+                                        onClick={() =>
+                                          void handleDeleteOrder(item.id)
+                                        }
+                                      >
+                                        {t(
+                                          'pages.events.eventDetail.deleteOrderOkButton',
+                                        )}
+                                      </Button>
+                                    </ButtonGroup>
+                                  </PopoverFooter>
+                                </PopoverContent>
+                              </>
                             )}
-                          </Box>
-                          <Box>{item.createdBy.fullName}</Box>
-                        </HStack>
+                          </Popover>
+                        </ButtonGroup>
                       )}
-                    </Box>
-                    <DescriptionItem label="Bestellung" direction="column">
-                      <Text fontSize="2xl">{item.text}</Text>
-                    </DescriptionItem>
-                  </VStack>
-                </ListItem>
-              ))}
-            </List>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <VStack width="100%">
-              <Box width="100%">
-                <Heading as="h3">
-                  {t('pages.events.eventDetail.eventDescriptions.title')}
-                </Heading>
-                <Divider />
-              </Box>
-              <Box width="100%">
-                {!updateEventFormOpen ? (
-                  <>
-                    <EventDescriptions event={data.event} />
-                  </>
-                ) : (
-                  <EventForm
-                    initialValues={{
-                      ...data.event,
-                      restaurant: data.event.restaurant.id,
-                    }}
-                    onFinish={() => {
-                      setUpdateEventFormOpen(false);
-                      void refetch();
-                    }}
-                    onCancel={() => setUpdateEventFormOpen(false)}
-                  />
-                )}
-              </Box>
-            </VStack>
-          </GridItem>
-        </Grid>
-      </VStack>
+                  </Flex>
+                  <Box width="100%">
+                    {updateOrderId === item.id ? (
+                      <>
+                        <EventOrderForm
+                          orderId={item.id}
+                          eventId={id}
+                          onFinish={() => {
+                            setUpdateOrderId(null);
+                            void refetch();
+                          }}
+                          initialValues={item}
+                        />
+                        <Divider />
+                      </>
+                    ) : (
+                      <HStack>
+                        <Avatar src={item.createdBy.avatarUrl} size="sm" />
+                        <Box>
+                          {item.availableForLottery ? (
+                            <GreenCheckMark />
+                          ) : (
+                            <RedStopSign />
+                          )}
+                        </Box>
+                        <Box>{item.createdBy.fullName}</Box>
+                      </HStack>
+                    )}
+                  </Box>
+                  <DescriptionItem label="Bestellung" direction="column">
+                    <Text fontSize="2xl">{item.text}</Text>
+                  </DescriptionItem>
+                </VStack>
+              </ListItem>
+            ))}
+          </List>
+        </GridItem>
+        <GridItem colSpan={2}>
+          <VStack width="100%">
+            <Box width="100%">
+              <Heading as="h3">
+                {t('pages.events.eventDetail.eventDescriptions.title')}
+              </Heading>
+              <Divider />
+            </Box>
+            <Box width="100%">
+              {!updateEventFormOpen ? (
+                <>
+                  <EventDescriptions event={data.event} />
+                </>
+              ) : (
+                <EventForm
+                  initialValues={{
+                    ...data.event,
+                    restaurant: data.event.restaurant.id,
+                  }}
+                  onFinish={() => {
+                    setUpdateEventFormOpen(false);
+                    void refetch();
+                  }}
+                  onCancel={() => setUpdateEventFormOpen(false)}
+                />
+              )}
+            </Box>
+          </VStack>
+        </GridItem>
+      </Grid>
     </DefaultLayout>
   );
 };

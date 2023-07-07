@@ -101,12 +101,12 @@ tools/reset
 
 Apply all existing migrations to the database. Now change the model and rebuild the application.
 ```shell
-docker-compose exec backend gradle build -x test
+docker compose exec backend gradle build -x test
 ```
 
 When the build is successful you can generate a migration:
 ```shell
-docker-compse exec backend gradle diffChangeLog
+docker compose exec backend gradle diffChangeLog
 ```
 
 This adds a file at `backend/src/main/resources/db/changelog/new.yaml`.

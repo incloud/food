@@ -61,7 +61,9 @@ export const EventForm: FunctionComponent<IEventFormProps> = ({
         await updateEvent({
           variables: {
             input: {
-              ...values,
+              restaurant: values.restaurant,
+              name: values.name,
+              description: values.description,
               active: initialValues.active,
               id: initialValues.id,
             },

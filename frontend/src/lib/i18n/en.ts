@@ -37,7 +37,14 @@ export const en = {
         website: 'Website',
       },
       site: 'Site',
+      site_plural: 'Sites',
+      webhook: 'Webhook',
+      webhook_plural: 'Webhooks',
       yes: 'Yes',
+      dark: 'dark',
+      light: 'light',
+      switchColorMode: 'Switch to {{colorMode}} mode',
+      url: 'URL',
     },
     components: {
       defaultLayout: {
@@ -124,6 +131,12 @@ export const en = {
       },
       restaurantList: {
         createRestaurantButton: 'Create $t(common.restaurant)',
+      },
+      siteList: {
+        createSiteButton: 'Create $t(common.site)',
+      },
+      siteDetail: {
+        editButton: 'Edit $(common.site)',
       },
     },
   },

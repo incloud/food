@@ -1,0 +1,10 @@
+query sites($name: String) {
+  sites(name: $name) {
+    id
+    name
+    webhooks {
+      id
+      name
+    }
+  }
+}

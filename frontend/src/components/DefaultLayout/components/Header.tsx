@@ -25,7 +25,7 @@ export const Header: FunctionComponent<IHeaderProps> = ({ user }) => {
   const { t } = useTranslation();
 
   return (
-    <Box as="header" width="100%" backgroundColor="brand.500">
+    <Box as="header" width="100%" backgroundColor="brand.500" color="white">
       <HStack maxWidth="8xl" marginX="auto" paddingX={4} paddingY={2}>
         <Box>
           <HStack>
@@ -34,7 +34,7 @@ export const Header: FunctionComponent<IHeaderProps> = ({ user }) => {
                 <Heading as="h1" size="md" fontFamily="monospace">
                   <HStack>
                     <Image src="/burger.png" alt="Burger Logo" />
-                    <Text>{` ${title ?? ''}`}</Text>
+                    <Text>{title}</Text>
                   </HStack>
                 </Heading>
               </Link>

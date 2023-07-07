@@ -39,7 +39,14 @@ export const de: typeof en = {
         website: 'Webseite',
       },
       site: 'Standort',
+      site_plural: 'Standorte',
+      webhook: 'Webhook',
+      webhook_plural: 'Webhooks',
       yes: 'Ja',
+      dark: 'Dark',
+      light: 'Light',
+      switchColorMode: 'Zum $t(common.{{colorMode}}) Mode wechseln',
+      url: 'URL',
     },
     components: {
       defaultLayout: {
@@ -125,6 +132,12 @@ export const de: typeof en = {
       },
       restaurantList: {
         createRestaurantButton: '$t(common.restaurant) erstellen',
+      },
+      siteList: {
+        createSiteButton: '$t(common.site) hinzufügen',
+      },
+      siteDetail: {
+        editButton: '$t(common.site) bearbeiten',
       },
     },
   },

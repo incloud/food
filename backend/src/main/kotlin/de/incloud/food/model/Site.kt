@@ -15,6 +15,9 @@ class Site(
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "site")
   val restaurants = mutableListOf<Restaurant>()
 
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "site")
+  val webhooks = mutableListOf<Webhook>()
+
   var teamsWebhookUrl: String? = null
 }
 

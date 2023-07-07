@@ -20,6 +20,10 @@ const baseStyle = helpers.definePartsStyle({
     width: '100%',
     paddingY: 2,
     borderBlockEnd: '1px solid black',
+
+    _dark: {
+      borderBlockEnd: '1px solid white',
+    },
   },
 });
 

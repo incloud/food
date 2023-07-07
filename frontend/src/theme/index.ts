@@ -6,6 +6,7 @@ import { Input } from '~/theme/Input';
 import { Link } from '~/theme/Link';
 import { List } from '~/theme/List';
 import { Select } from '~/theme/Select';
+import { Table } from '~/theme/Table';
 import { Textarea } from '~/theme/Textarea';
 
 const config = {
@@ -15,9 +16,7 @@ const config = {
 
 const styles = {
   global: {
-    body: {
-      backgroundColor: 'gray.200',
-    },
+    body: {},
   },
 };
 
@@ -30,6 +29,7 @@ const components = {
   Select,
   Textarea,
   ButtonGroup,
+  Table,
 };
 
 export const theme = extendTheme({

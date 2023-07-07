@@ -1,0 +1,11 @@
+query site($id: ID!) {
+  site(id: $id) {
+    id
+    name
+    webhooks {
+      id
+      name
+      url
+    }
+  }
+}

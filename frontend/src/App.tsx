@@ -7,6 +7,7 @@ import { paths } from '~/lib/paths';
 import { EventDetailPage } from '~/pages/EventDetailPage';
 import { HomePage } from '~/pages/HomePage';
 import { RestaurantsPage } from '~/pages/RestaurantsPage';
+import { SitesPage } from '~/pages/SitesPage';
 import { theme } from '~/theme';
 
 export const App = () => (
@@ -18,6 +19,7 @@ export const App = () => (
           <Route path={paths.home} element={<HomePage />} />
           <Route path={paths.event(':id')} element={<EventDetailPage />} />
           <Route path={paths.restaurant('*')} element={<RestaurantsPage />} />
+          <Route path={paths.site('*')} element={<SitesPage />} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>

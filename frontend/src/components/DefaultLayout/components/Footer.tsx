@@ -5,11 +5,13 @@ import {
 } from '@ant-design/icons';
 import {
   Box,
+  Button,
   HStack,
   Image,
   Link,
   Select,
   StackDivider,
+  useColorMode,
   VStack,
 } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
@@ -18,6 +20,7 @@ import { supportedLngs } from '~/lib/i18n';
 
 export const Footer: FunctionComponent = () => {
   const { t, i18n } = useTranslation();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box as="footer" width="100%" paddingBottom={5} marginTop={10}>
@@ -56,6 +59,13 @@ export const Footer: FunctionComponent = () => {
                 ))}
               </Select>
             </HStack>
+          </Box>
+          <Box>
+            <Button onClick={toggleColorMode}>
+              {t('common.switchColorMode', {
+                colorMode: colorMode === 'light' ? 'dark' : 'light',
+              })}
+            </Button>
           </Box>
         </HStack>
 

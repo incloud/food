@@ -1,7 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
 import {
   Input,
-  VStack,
   Button,
   InputGroup,
   InputRightAddon,
@@ -35,7 +34,7 @@ export const RestaurantListPage: FunctionComponent = () => {
   const searchNameDebounced = useDebounce(searchName);
   const [createFormOpen, setCreateFormOpen] = useState(false);
   const { data: userData } = useCurrentUserQuery();
-  const { data, /*loading,*/ error, refetch } = useRestaurantsQuery({
+  const { data, error, refetch } = useRestaurantsQuery({
     variables: {
       site: userData?.user.site?.id || '',
       name: searchNameDebounced || null,
@@ -51,79 +50,74 @@ export const RestaurantListPage: FunctionComponent = () => {
 
   return (
     <DefaultLayout>
-      <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
-        <PageTitle title={t('common.restaurant_plural')}>
-          <InputGroup>
-            <Input
-              placeholder={t('common.name')}
-              value={searchName}
-              onChange={e => setSearchName(e.target.value)}
-            />
-            <InputRightAddon>
-              <SearchOutlined />
-            </InputRightAddon>
-          </InputGroup>
-          {!createFormOpen && (
-            <Box>
-              <Button
-                colorScheme="brand"
-                onClick={() => setCreateFormOpen(true)}
-              >
-                {t('pages.restaurantList.createRestaurantButton')}
-              </Button>
-            </Box>
-          )}
-        </PageTitle>
-
-        {createFormOpen && (
-          <>
-            <RestaurantForm
-              onFinish={() => {
-                setCreateFormOpen(false);
-                void refetch();
-              }}
-              onCancel={() => setCreateFormOpen(false)}
-            />
-            <Divider />
-          </>
+      <PageTitle title={t('common.restaurant_plural')}>
+        <InputGroup>
+          <Input
+            placeholder={t('common.name')}
+            value={searchName}
+            onChange={e => setSearchName(e.target.value)}
+          />
+          <InputRightAddon>
+            <SearchOutlined />
+          </InputRightAddon>
+        </InputGroup>
+        {!createFormOpen && (
+          <Box>
+            <Button colorScheme="brand" onClick={() => setCreateFormOpen(true)}>
+              {t('pages.restaurantList.createRestaurantButton')}
+            </Button>
+          </Box>
         )}
+      </PageTitle>
 
-        <TableContainer width="100%">
-          <Table variant="striped" size="lg">
-            <Thead>
+      {createFormOpen && (
+        <>
+          <RestaurantForm
+            onFinish={() => {
+              setCreateFormOpen(false);
+              void refetch();
+            }}
+            onCancel={() => setCreateFormOpen(false)}
+          />
+          <Divider />
+        </>
+      )}
+
+      <TableContainer width="100%">
+        <Table variant="stripedContrast" size="lg">
+          <Thead>
+            <Tr>
+              <Th>{t('common.name')}</Th>
+              <Th>{t('common.restaurantDescription.address')}</Th>
+              <Th>{t('common.restaurantDescription.website')}</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.restaurants.map(item => (
               <Tr>
-                <Th>{t('common.name')}</Th>
-                <Th>{t('common.restaurantDescription.address')}</Th>
-                <Th>{t('common.restaurantDescription.website')}</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data?.restaurants.map(item => (
-                <Tr>
-                  <Td>
-                    <Link as={RouterLink} to={paths.restaurant(item.id)}>
-                      {item.name}
+                <Td>
+                  <Link as={RouterLink} to={paths.restaurant(item.id)}>
+                    {item.name}
+                  </Link>
+                </Td>
+                <Td>{item.address?.split('\n').join(', ')}</Td>
+                <Td>
+                  {item.website != null && (
+                    <Link
+                      isExternal={true}
+                      href={item.website}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {item.website}
                     </Link>
-                  </Td>
-                  <Td>{item.address?.split('\n').join(', ')}</Td>
-                  <Td>
-                    {item.website != null && (
-                      <Link
-                        isExternal={true}
-                        href={item.website}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        {item.website}
-                      </Link>
-                    )}
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </VStack>
+                  )}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </DefaultLayout>
   );
 };

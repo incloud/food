@@ -1,6 +1,13 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, ButtonGroup, VStack } from '@chakra-ui/react';
-import { Alert, notification, Popconfirm } from 'antd';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Button,
+  ButtonGroup,
+  VStack,
+} from '@chakra-ui/react';
+import { notification, Popconfirm } from 'antd';
 import { useState, FunctionComponent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -65,57 +72,54 @@ export const RestaurantDetailPage: FunctionComponent = () => {
     <DefaultLayout>
       <SiteWarning type="restaurant" siteId={data.restaurant.site.id} />
       {data.restaurant.deleted && (
-        <Alert
-          message={t('pages.restaurantDetail.deleted')}
-          type="error"
-          showIcon={true}
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('pages.restaurantDetail.deleted')}</AlertTitle>
+        </Alert>
+      )}
+      <PageTitle title={data.restaurant.name}>
+        {!updateRestaurantFormOpen && !data.restaurant.deleted && (
+          <ButtonGroup>
+            <Button
+              colorScheme="brand"
+              leftIcon={<EditOutlined />}
+              onClick={() => setUpdateRestaurantFormOpen(true)}
+              isLoading={deleteLoading}
+            >
+              {t('pages.restaurantDetail.edit')}
+            </Button>
+            <Popconfirm
+              title={t('pages.restaurantDetail.deleteConfirmation')}
+              okText={t('common.yes')}
+              cancelText={t('common.no')}
+              onConfirm={() => void handleDeleteConfirm}
+            >
+              <Button leftIcon={<DeleteOutlined />}>
+                {t('pages.restaurantDetail.delete')}
+              </Button>
+            </Popconfirm>{' '}
+          </ButtonGroup>
+        )}
+      </PageTitle>
+      {!updateRestaurantFormOpen ? (
+        <VStack width="50%" alignSelf="flex-start">
+          {getCommonRestaurantDescriptions({
+            restaurant: data.restaurant,
+            t,
+            showName: false,
+          })}
+          {getCreatedUpdatedDescriptions({ entity: data.restaurant, t })}
+        </VStack>
+      ) : (
+        <RestaurantForm
+          initialValues={data.restaurant}
+          onFinish={() => {
+            setUpdateRestaurantFormOpen(false);
+            void refetch();
+          }}
+          onCancel={() => setUpdateRestaurantFormOpen(false)}
         />
       )}
-      <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
-        <PageTitle title={data.restaurant.name}>
-          {!updateRestaurantFormOpen && !data.restaurant.deleted && (
-            <ButtonGroup>
-              <Button
-                colorScheme="brand"
-                leftIcon={<EditOutlined />}
-                onClick={() => setUpdateRestaurantFormOpen(true)}
-                isLoading={deleteLoading}
-              >
-                {t('pages.restaurantDetail.edit')}
-              </Button>
-              <Popconfirm
-                title={t('pages.restaurantDetail.deleteConfirmation')}
-                okText={t('common.yes')}
-                cancelText={t('common.no')}
-                onConfirm={() => void handleDeleteConfirm}
-              >
-                <Button leftIcon={<DeleteOutlined />}>
-                  {t('pages.restaurantDetail.delete')}
-                </Button>
-              </Popconfirm>{' '}
-            </ButtonGroup>
-          )}
-        </PageTitle>
-        {!updateRestaurantFormOpen ? (
-          <VStack width="50%" alignSelf="flex-start">
-            {getCommonRestaurantDescriptions({
-              restaurant: data.restaurant,
-              t,
-              showName: false,
-            })}
-            {getCreatedUpdatedDescriptions({ entity: data.restaurant, t })}
-          </VStack>
-        ) : (
-          <RestaurantForm
-            initialValues={data.restaurant}
-            onFinish={() => {
-              setUpdateRestaurantFormOpen(false);
-              void refetch();
-            }}
-            onCancel={() => setUpdateRestaurantFormOpen(false)}
-          />
-        )}
-      </VStack>
     </DefaultLayout>
   );
 };

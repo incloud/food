@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   FormControl,
   FormLabel,
@@ -10,8 +11,10 @@ import {
   Box,
   SystemStyleObject,
   VStack,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
-import { Alert } from 'antd';
 import { FunctionComponent, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -59,8 +62,13 @@ export const RestaurantForm: FunctionComponent<IRestaurantFormProps> = ({
         await updateRestaurant({
           variables: {
             input: {
-              ...values,
               id: initialValues.id,
+              address: values.address,
+              comment: values.comment,
+              delivery: values.delivery,
+              name: values.name,
+              phone: values.phone,
+              website: values.website,
             },
           },
         });
@@ -88,13 +96,13 @@ export const RestaurantForm: FunctionComponent<IRestaurantFormProps> = ({
   return (
     <Box width="100%" sx={formStyle}>
       {error && (
-        <Alert
-          message={t('common.errors.unknown.message')}
-          description={t('common.errors.unknown.description')}
-          type="error"
-          showIcon
-          closable
-        />
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('common.errors.unknown.message')}</AlertTitle>
+          <AlertDescription>
+            {t('common.errors.unknown.description')}
+          </AlertDescription>
+        </Alert>
       )}
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form className="restaurantForm" onSubmit={handleSubmit(handleFinish)}>

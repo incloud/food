@@ -19,7 +19,10 @@ data class User(
   var lastName: String,
 
   @Column(nullable = false)
-  var email: String
+  var email: String,
+
+  @Column(nullable = false, columnDefinition = "bigint default 0")
+  var hitCount: Long = 0
 ) : Node() {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn()

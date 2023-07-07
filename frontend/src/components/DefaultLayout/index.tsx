@@ -14,7 +14,9 @@ export const DefaultLayout: FunctionComponent<{
       <Header user={data?.user} />
 
       <Box as="main" width="100%" flex="auto">
-        {children}
+        <VStack width="100%" maxWidth="8xl" marginX="auto" paddingX={4}>
+          {children}
+        </VStack>
       </Box>
 
       <Footer />
