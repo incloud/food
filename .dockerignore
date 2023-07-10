@@ -10,10 +10,12 @@
 !frontend/public
 !frontend/codegen.yml
 !frontend/vite.config.ts
+!frontend/index.html
 !frontend/tsconfig.json
 !frontend/tsconfig.node.json
-!frontend/.prettierrc.yaml
+!frontend/.prettierrc.yml
 !frontend/.eslintrc.json
+!frontend/.eslintignore
 !frontend/.prettierignore
 
 !.editorconfig
