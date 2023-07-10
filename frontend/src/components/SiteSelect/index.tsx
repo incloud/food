@@ -21,9 +21,9 @@ export const SiteSelect: FunctionComponent<ISiteSelectProps> = ({
   const loading = siteDataLoading || userDataLoading || updateLoading;
 
   const handleSelect = useCallback(
-    async (value: string) => {
+    async (selectedSite: string) => {
       if (autoUpdateUser) {
-        await updateUserSite({ variables: { id: value } });
+        await updateUserSite({ variables: { id: selectedSite } });
       }
     },
     [autoUpdateUser, updateUserSite],
@@ -48,7 +48,8 @@ export const SiteSelect: FunctionComponent<ISiteSelectProps> = ({
     <Select
       placeholder={t('components.siteSelect.dropdownPlaceholder')}
       disabled={loading}
-      onSelect={void handleSelect}
+      value={userData?.user.site?.id}
+      onChange={event => void handleSelect(event.target.value)}
     >
       {siteData?.sites.map(site => (
         <option value={site.id} key={site.id}>
