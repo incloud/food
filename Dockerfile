@@ -17,7 +17,7 @@ RUN gradle graphqlGenerateSDL
 
 # -----------------------------------------------------
 
-FROM node:20.3.1-alpine3.17 as frontend-build
+FROM node:20.2.0-alpine3.17 as frontend-build
 
 WORKDIR /var/app/frontend
 
