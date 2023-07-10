@@ -35,7 +35,7 @@ RUN yarn run gql-gen && yarn run build
 # -----------------------------------------------------
 
 FROM backend-build as backend-jar
-COPY --from=frontend-build /var/app/frontend/build/ src/main/resources/static/
+COPY --from=frontend-build /var/app/frontend/dist/ src/main/resources/static/
 # Now we can build the Jar again, including the frontend
 RUN gradle bootJar
 
