@@ -1,15 +1,17 @@
-import { Select } from 'antd';
-import { DefaultOptionType, SelectProps } from 'antd/lib/select';
+import { Select } from '@chakra-ui/react';
+import { FunctionComponent, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSiteSelectQuery } from './gql/siteSelect.generated';
 import { useUpdateUserSiteMutation } from './gql/updateUserSite.generated';
-import { useCurrentUserQuery } from '../../gql/user.generated';
-import { css } from '@emotion/react';
-import { FunctionComponent } from 'react';
+import { useCurrentUserQuery } from '~/gql/user.generated';
 
-export const SiteSelect: FunctionComponent<
-  SelectProps<string> & { autoUpdateUser?: boolean }
-> = ({ autoUpdateUser, onSelect, ...props }) => {
+interface ISiteSelectProps {
+  autoUpdateUser?: boolean;
+}
+
+export const SiteSelect: FunctionComponent<ISiteSelectProps> = ({
+  autoUpdateUser,
+}) => {
   const { t } = useTranslation();
   const { data: siteData, loading: siteDataLoading } = useSiteSelectQuery();
   const { data: userData, loading: userDataLoading } = useCurrentUserQuery();
@@ -18,40 +20,41 @@ export const SiteSelect: FunctionComponent<
 
   const loading = siteDataLoading || userDataLoading || updateLoading;
 
-  if (
-    autoUpdateUser &&
-    !loading &&
-    !userData?.user.site?.id &&
-    siteData?.sites.length
-  ) {
-    void updateUserSite({ variables: { id: siteData.sites[0].id } });
-  }
+  const handleSelect = useCallback(
+    async (selectedSite: string) => {
+      if (autoUpdateUser) {
+        await updateUserSite({ variables: { id: selectedSite } });
+      }
+    },
+    [autoUpdateUser, updateUserSite],
+  );
+
+  useEffect(() => {
+    if (autoUpdateUser && !loading && !userData?.user.site?.id) {
+      const siteId = siteData?.sites[0]?.id;
+      if (siteId != null) {
+        void updateUserSite({ variables: { id: siteId } });
+      }
+    }
+  }, [
+    autoUpdateUser,
+    loading,
+    siteData,
+    updateUserSite,
+    userData?.user.site?.id,
+  ]);
 
   return (
     <Select
-      showSearch
       placeholder={t('components.siteSelect.dropdownPlaceholder')}
-      optionFilterProp="children"
-      loading={loading}
       disabled={loading}
-      onSelect={async (value: string, option: DefaultOptionType) => {
-        if (autoUpdateUser) {
-          await updateUserSite({ variables: { id: value } });
-        }
-        if (onSelect) {
-          onSelect(value, option);
-        }
-      }}
-      defaultValue={userData?.user.site?.id}
-      css={css`
-        min-width: 10em;
-      `}
-      {...props}
+      value={userData?.user.site?.id}
+      onChange={event => void handleSelect(event.target.value)}
     >
       {siteData?.sites.map(site => (
-        <Select.Option value={site.id} key={site.id}>
+        <option value={site.id} key={site.id}>
           {site.name}
-        </Select.Option>
+        </option>
       ))}
     </Select>
   );

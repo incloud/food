@@ -1,23 +1,47 @@
-import { Alert, Button, Form, Input, Switch } from 'antd';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  VStack,
+  Switch,
+  Text,
+  HStack,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from '@chakra-ui/react';
+import { FunctionComponent, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import {
   ICreateEventOrderMutationVariables,
   useCreateEventOrderMutation,
 } from './gql/createEventOrder.generated';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useUpdateEventOrderMutation } from './gql/updateEventOrder.generated';
-import { useTranslation } from 'react-i18next';
-import { FunctionComponent } from 'react';
-import { Fragment } from 'react';
 
 type Values = Omit<ICreateEventOrderMutationVariables, 'event'>;
 
-export const EventOrderForm: FunctionComponent<{
+interface IEventOrderFormProps {
   eventId: string;
   orderId?: string;
   initialValues?: Values;
   onFinish: () => void;
   onCancel?: () => void;
-}> = ({ eventId, orderId, initialValues, onFinish, onCancel }) => {
+}
+
+export const EventOrderForm: FunctionComponent<IEventOrderFormProps> = ({
+  eventId,
+  orderId,
+  initialValues,
+  onFinish,
+  onCancel,
+}) => {
   const { t } = useTranslation();
   const [addOrder, { loading: createLoading, error: createError }] =
     useCreateEventOrderMutation();
@@ -26,84 +50,90 @@ export const EventOrderForm: FunctionComponent<{
   const error = createError || updateError;
   const loading = createLoading || updateLoading;
 
+  const { register, handleSubmit } = useForm<Values>({
+    defaultValues: initialValues,
+  });
+
+  const handleEventFinish = useCallback(
+    async (values: Values) => {
+      if (orderId) {
+        await updateOrder({
+          variables: {
+            ...values,
+            id: orderId,
+          },
+        });
+      } else {
+        await addOrder({
+          variables: {
+            ...values,
+            event: eventId,
+          },
+        });
+      }
+      onFinish();
+    },
+    [addOrder, eventId, onFinish, orderId, updateOrder],
+  );
+
   return (
-    <Fragment>
+    <Box>
+      <Heading as="h4" size="md">
+        {orderId != null ? 'Bestellung bearbeiten' : 'Bestellung hinzufügen'}
+      </Heading>
       {error && (
-        <Alert
-          message={t('common.errors.unknown.message')}
-          description={t('common.errors.unknown.description')}
-          type="error"
-          showIcon
-          closable
-        />
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('common.errors.unknown.message')}</AlertTitle>
+          <AlertDescription>
+            {t('common.errors.unknown.description')}
+          </AlertDescription>
+        </Alert>
       )}
-      <Form
-        initialValues={initialValues || { availableForLottery: true }}
-        onFinish={async values => {
-          if (orderId) {
-            await updateOrder({
-              variables: {
-                ...values,
-                id: orderId,
-              },
-            });
-          } else {
-            await addOrder({
-              variables: {
-                ...values,
-                event: eventId,
-              },
-            });
-          }
-          onFinish();
-        }}
-      >
-        <Form.Item
-          label={t('pages.events.eventDetail.eventOrderForm.textLabel')}
-          name="text"
-          rules={[
-            {
-              required: true,
-              message: t('pages.events.eventDetail.eventOrderForm.textRequiredMessage'),
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={t(
-            'pages.events.eventDetail.eventOrderForm.availableForLotteryLabel',
-          )}
-          name="availableForLottery"
-          valuePropName="checked"
-        >
-          <Switch
-            checkedChildren={<CheckOutlined />}
-            unCheckedChildren={<CloseOutlined />}
-            defaultChecked
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={loading}
-            loading={loading}
-          >
-            {t('common.buttons.submit')}
-          </Button>
-          {onCancel && (
-            <Fragment>
-              {' '}
-              <Button onClick={onCancel} disabled={loading}>
-                {t('common.buttons.cancel')}
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={handleSubmit(handleEventFinish)}>
+        <VStack>
+          <FormControl isRequired={true}>
+            <FormLabel>
+              {t('pages.events.eventDetail.eventOrderForm.textLabel')}
+            </FormLabel>
+            <Input {...register('text')} />
+            <FormErrorMessage>
+              {t('pages.events.eventDetail.eventOrderForm.textRequiredMessage')}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <Text>
+              {t(
+                'pages.events.eventDetail.eventOrderForm.availableForLotteryLabel',
+              )}
+            </Text>
+          </FormControl>
+          <FormControl>
+            <HStack>
+              <FormLabel>Verfügbar für Auslosung</FormLabel>
+              <Switch {...register('availableForLottery')} />
+            </HStack>
+          </FormControl>
+          <FormControl>
+            <ButtonGroup>
+              <Button
+                colorScheme="brand"
+                type="submit"
+                disabled={loading}
+                isLoading={loading}
+              >
+                {t('common.buttons.submit')}
               </Button>
-            </Fragment>
-          )}
-        </Form.Item>
-      </Form>
-    </Fragment>
+              {onCancel && (
+                <Button onClick={onCancel} disabled={loading}>
+                  {t('common.buttons.cancel')}
+                </Button>
+              )}
+            </ButtonGroup>
+          </FormControl>
+        </VStack>
+      </form>
+    </Box>
   );
 };

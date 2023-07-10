@@ -1,0 +1,11 @@
+mutation updateSite($input: UpdateSiteMutationInput!) {
+  updateSite(input: $input) {
+    id
+    name
+    webhooks {
+      id
+      name
+      url
+    }
+  }
+}

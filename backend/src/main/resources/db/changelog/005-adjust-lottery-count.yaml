@@ -1,0 +1,24 @@
+databaseChangeLog:
+- changeSet:
+    id: 1688742684331-2
+    author: root (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            defaultValueNumeric: 1
+            name: participate_count
+            type: bigint
+        tableName: user
+- changeSet:
+    id: 1688742684331-1
+    author: root (generated)
+    changes:
+    - addDefaultValue:
+        columnDataType: bigint
+        columnName: hit_count
+        defaultValueNumeric: '1'
+        tableName: user
+

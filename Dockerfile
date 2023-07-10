@@ -1,4 +1,4 @@
-FROM gradle:7.5.1-jdk17 as backend-build
+FROM gradle:8.1.1-jdk17 as backend-build
 
 WORKDIR /var/app/backend
 ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.logging.level=info -Dorg.gradle.parallel=true"
@@ -17,21 +17,20 @@ RUN gradle graphqlGenerateSDL
 
 # -----------------------------------------------------
 
-FROM node:19.0.0-alpine3.16 as frontend-build
+FROM node:20.3.1-alpine3.17 as frontend-build
 
 WORKDIR /var/app/frontend
-RUN npm install -g npm@8.10.0
 
 COPY frontend/package.json .
-COPY frontend/package-lock.json .
+COPY frontend/yarn.lock .
 
 # TODO: Fix
-RUN npm ci --force
+RUN yarn install --force
 
 COPY --from=backend-build /var/app/backend/build/schema.graphql .
 COPY frontend/ .
 
-RUN npm run gql-gen && npm run build
+RUN yarn run gql-gen && yarn run build
 
 # -----------------------------------------------------
 

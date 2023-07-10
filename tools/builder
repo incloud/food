@@ -2,4 +2,4 @@
 
 set -e
 
-docker-compose exec backend gradle build --continuous -xtest --stacktrace
+docker compose exec backend gradle build --continuous -xtest --stacktrace

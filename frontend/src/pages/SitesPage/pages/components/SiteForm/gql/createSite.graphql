@@ -1,0 +1,9 @@
+mutation createSite($input: CreateSiteMutationInput!) {
+  createSite(input: $input) {
+    name
+    webhooks {
+      name
+      url
+    }
+  }
+}

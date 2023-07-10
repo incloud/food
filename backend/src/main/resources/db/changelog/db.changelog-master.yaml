@@ -5,3 +5,7 @@ databaseChangeLog:
     file: db/changelog/002-event-description.yaml
 - include:
     file: db/changelog/003-site-teams-webhook-url.yaml
+- include:
+    file: db/changelog/004-webhook-and-user-hit-count.yaml
+- include:
+    file: db/changelog/005-adjust-lottery-count.yaml

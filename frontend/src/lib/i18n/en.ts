@@ -16,7 +16,11 @@ export const en = {
         cancel: 'Cancel',
       },
       created: 'Created',
+      createdAt: '$t(common.created) at',
+      createdBy: '$t(common.created) by',
       updated: 'Last updated',
+      updatedAt: '$t(common.updated) at',
+      updatedBy: '$t(common.updated) by',
       lottery: 'Lottery',
       event: 'Event',
       event_plural: 'Events',
@@ -33,7 +37,14 @@ export const en = {
         website: 'Website',
       },
       site: 'Site',
+      site_plural: 'Sites',
+      webhook: 'Webhook',
+      webhook_plural: 'Webhooks',
       yes: 'Yes',
+      dark: 'dark',
+      light: 'light',
+      switchColorMode: 'Switch to {{colorMode}} mode',
+      url: 'URL',
     },
     components: {
       defaultLayout: {
@@ -73,17 +84,22 @@ export const en = {
         },
         eventDetail: {
           eventOrderForm: {
-            textLabel: 'Text',
+            textLabel: '$t(common.order)',
             textRequiredMessage:
               'Please enter your $t(common.order, lowercase)',
             availableForLotteryLabel:
               'Are you available to place the $t(common.order, lowercase)? One person will be randomly selected to do this.',
           },
           eventDescriptions: {
+            title: 'Information',
             statusLabel: 'Status',
             statusActive: '$t(common.event) is active',
             statusClosed: '$t(common.event) is already closed',
             lotteryWinner: '{{name}} was selected for ordering',
+            description: 'Description',
+          },
+          participantList: {
+            title: 'Participants',
           },
           errors: {
             deleteOrder: 'Could not delete your $t(common.order, lowercase)!',
@@ -94,15 +110,19 @@ export const en = {
           deleteOrderTitle: 'Not hungry anymore?',
           deleteOrderOkButton: 'Yes',
           deleteOrderCancelButton: 'No',
+          editEvent: 'Edit event',
         },
         eventList: {
           title: '$t(common.event_plural)',
           searchPlaceholder: 'Name',
           createEventButton: 'Create $t(common.event)',
           loadMoreButton: 'Load More',
+          gotoButton: 'Go to event',
         },
       },
       restaurantDetail: {
+        edit: 'Edit restaurant',
+        delete: 'Delete restaurant',
         deleteConfirmation: 'Do you really want to delete this restaurant?',
         deleted: 'This restaurant was deleted',
         deleteSuccess: {
@@ -111,6 +131,12 @@ export const en = {
       },
       restaurantList: {
         createRestaurantButton: 'Create $t(common.restaurant)',
+      },
+      siteList: {
+        createSiteButton: 'Create $t(common.site)',
+      },
+      siteDetail: {
+        editButton: 'Edit $(common.site)',
       },
     },
   },

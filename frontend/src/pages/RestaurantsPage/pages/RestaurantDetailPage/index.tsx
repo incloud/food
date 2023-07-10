@@ -1,33 +1,38 @@
-import { DefaultLayout } from '../../../../components/DefaultLayout';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { LoadingPage } from '../../../../components/LoadingPage';
-import { ErrorUnknownPage } from '../../../../components/Error/ErrorUnknownPage';
-import { Error404Page } from '../../../../components/Error/Error404Page';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Alert,
+  AlertIcon,
+  AlertTitle,
   Button,
-  Col,
-  Descriptions,
-  notification,
-  Popconfirm,
-  Row,
-} from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+  ButtonGroup,
+  Popover,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  useToast,
+  VStack,
+} from '@chakra-ui/react';
+import { useState, FunctionComponent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRestaurantQuery } from './gql/restaurant.generated';
-import { RestaurantForm } from 'pages/RestaurantsPage/components/RestaurantForm';
-import { getCommonRestaurantDescriptions } from 'components/getCommonRestaurantDescriptions';
-import { defaultBottomMargin } from 'lib/styles';
-import { SiteWarning } from 'components/SiteWarning';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDeleteRestaurantMutation } from './gql/deleteRestaurant.generated';
-import { paths } from 'lib/paths';
-import { getCreatedUpdatedDescriptions } from 'components/getCreatedUpdatedDescriptions';
-import { FunctionComponent } from 'react';
-import { Fragment } from 'react';
+import { useRestaurantQuery } from './gql/restaurant.generated';
+import { DefaultLayout } from '~/components/DefaultLayout';
+import { Error404Page } from '~/components/Error/Error404Page';
+import { ErrorUnknownPage } from '~/components/Error/ErrorUnknownPage';
+import { LoadingPage } from '~/components/LoadingPage';
+import { PageTitle } from '~/components/PageTitle';
+import { SiteWarning } from '~/components/SiteWarning';
+import { getCommonRestaurantDescriptions } from '~/components/getCommonRestaurantDescriptions';
+import { getCreatedUpdatedDescriptions } from '~/components/getCreatedUpdatedDescriptions';
+import { paths } from '~/lib/paths';
+import { RestaurantForm } from '~/pages/RestaurantsPage/components/RestaurantForm';
 
 export const RestaurantDetailPage: FunctionComponent = () => {
   const { t } = useTranslation();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, loading, error, refetch } = useRestaurantQuery({
@@ -44,6 +49,26 @@ export const RestaurantDetailPage: FunctionComponent = () => {
   const [updateRestaurantFormOpen, setUpdateRestaurantFormOpen] =
     useState(false);
 
+  const handleDeleteConfirm = useCallback(async () => {
+    try {
+      await deleteRestaurant();
+    } catch {
+      toast({
+        title: t('common.errors.unknown', { returnObjects: true }),
+        status: 'error',
+      });
+      return;
+    }
+
+    navigate(paths.restaurants);
+    toast({
+      title: t('pages.restaurantDetail.deleteSuccess', {
+        returnObjects: true,
+      }),
+      status: 'success',
+    });
+  }, [deleteRestaurant, navigate, t, toast]);
+
   if (error) {
     return <ErrorUnknownPage />;
   }
@@ -56,73 +81,70 @@ export const RestaurantDetailPage: FunctionComponent = () => {
 
   return (
     <DefaultLayout>
-      {data.restaurant.deleted && (
-        <Alert
-          message={t('pages.restaurantDetail.deleted')}
-          type="error"
-          showIcon
-          css={defaultBottomMargin}
-        />
-      )}
-
       <SiteWarning type="restaurant" siteId={data.restaurant.site.id} />
-
+      {data.restaurant.deleted && (
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('pages.restaurantDetail.deleted')}</AlertTitle>
+        </Alert>
+      )}
+      <PageTitle title={data.restaurant.name}>
+        {!updateRestaurantFormOpen && !data.restaurant.deleted && (
+          <ButtonGroup>
+            <Button
+              colorScheme="brand"
+              leftIcon={<EditOutlined />}
+              onClick={() => setUpdateRestaurantFormOpen(true)}
+              isLoading={deleteLoading}
+            >
+              {t('pages.restaurantDetail.edit')}
+            </Button>
+            <Popover placement="bottom-end">
+              {({ onClose }) => (
+                <>
+                  <PopoverTrigger>
+                    <Button leftIcon={<DeleteOutlined />}>
+                      {t('pages.restaurantDetail.delete')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                      {t('pages.restaurantDetail.deleteConfirmation')}
+                    </PopoverHeader>
+                    <PopoverFooter>
+                      <ButtonGroup>
+                        <Button onClick={onClose}>{t('common.no')}</Button>
+                        <Button
+                          colorScheme="brand"
+                          onClick={void handleDeleteConfirm}
+                        >
+                          {t('common.yes')}
+                        </Button>
+                      </ButtonGroup>
+                    </PopoverFooter>
+                  </PopoverContent>
+                </>
+              )}
+            </Popover>
+          </ButtonGroup>
+        )}
+      </PageTitle>
       {!updateRestaurantFormOpen ? (
-        <Fragment>
-          <Row>
-            <Col flex={3}>
-              <h2>{data.restaurant.name}</h2>
-            </Col>
-            {!data.restaurant.deleted && (
-              <Col>
-                <Popconfirm
-                  title={t('pages.restaurantDetail.deleteConfirmation')}
-                  okText={t('common.yes')}
-                  cancelText={t('common.no')}
-                  onConfirm={async () => {
-                    try {
-                      await deleteRestaurant();
-                    } catch {
-                      notification.error(
-                        t('common.errors.unknown', { returnObjects: true }),
-                      );
-                      return;
-                    }
-
-                    navigate(paths.restaurants);
-                    notification.success(
-                      t('pages.restaurantDetail.deleteSuccess', {
-                        returnObjects: true,
-                      }),
-                    );
-                  }}
-                >
-                  <Button icon={<DeleteOutlined />} />
-                </Popconfirm>{' '}
-                <Button
-                  icon={<EditOutlined />}
-                  onClick={() => setUpdateRestaurantFormOpen(true)}
-                  loading={deleteLoading}
-                />
-              </Col>
-            )}
-          </Row>
-
-          <Descriptions column={1} css={defaultBottomMargin} bordered={true}>
-            {getCommonRestaurantDescriptions({
-              restaurant: data.restaurant,
-              t,
-              showName: false,
-            })}
-            {getCreatedUpdatedDescriptions({ entity: data.restaurant, t })}
-          </Descriptions>
-        </Fragment>
+        <VStack width="50%" alignSelf="flex-start">
+          {getCommonRestaurantDescriptions({
+            restaurant: data.restaurant,
+            t,
+            showName: false,
+          })}
+          {getCreatedUpdatedDescriptions({ entity: data.restaurant, t })}
+        </VStack>
       ) : (
         <RestaurantForm
           initialValues={data.restaurant}
           onFinish={() => {
             setUpdateRestaurantFormOpen(false);
-            refetch();
+            void refetch();
           }}
           onCancel={() => setUpdateRestaurantFormOpen(false)}
         />

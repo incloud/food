@@ -19,7 +19,13 @@ data class User(
   var lastName: String,
 
   @Column(nullable = false)
-  var email: String
+  var email: String,
+
+  @Column(nullable = false, columnDefinition = "bigint default 1")
+  var hitCount: Long = 1,
+
+  @Column(nullable = false, columnDefinition = "bigint default 1")
+  var participateCount: Long = 1
 ) : Node() {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn()
@@ -33,6 +39,8 @@ data class User(
   }
 
   fun fullName() = "$firstName $lastName"
+
+  fun lotteryRatio() = participateCount.toDouble() / hitCount.toDouble()
 }
 
 interface UserRepository : JpaRepository<User, UUID> {

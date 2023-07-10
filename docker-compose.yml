@@ -31,7 +31,7 @@ services:
     build:
       context: .
       target: frontend-build
-    command: npm run start
+    command: yarn run start
     environment:
       CI: 'true' # https://github.com/facebook/create-react-app/issues/8688
     ports:

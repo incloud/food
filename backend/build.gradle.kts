@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   id("org.springframework.boot") version "2.7.5"
   id("io.spring.dependency-management") version "1.1.0"
-  id("org.liquibase.gradle") version "2.1.1"
+  id("org.liquibase.gradle") version "2.2.0"
 
   val kotlinVersion = "1.7.20"
   kotlin("jvm") version kotlinVersion
@@ -55,8 +55,6 @@ dependencies {
   liquibaseRuntime("org.mariadb.jdbc:mariadb-java-client")
   liquibaseRuntime("org.liquibase.ext:liquibase-hibernate5:4.17.0")
   liquibaseRuntime("info.picocli:picocli:4.6.3")
-  liquibaseRuntime(sourceSets.getByName("main").compileClasspath)
-  liquibaseRuntime(sourceSets.getByName("main").runtimeClasspath)
   liquibaseRuntime(sourceSets.getByName("main").output)
 }
 
@@ -72,10 +70,13 @@ tasks.withType<KotlinCompile> {
 }
 
 // tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
-//   jvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005")
+//   jvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005")
 // }
 
 configurations {
+  liquibaseRuntime {
+    extendsFrom(configurations.compileClasspath.get())
+  }
   liquibase {
     activities.register("main")
     runList = "main"

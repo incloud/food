@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   enable-background="new 0 0 2048 442"
+   viewBox="0 0 450.50195 425.89001"
+   version="1.1"
+   id="svg26"
+   sodipodi:docname="q_logo.svg"
+   width="450.50195"
+   height="425.89001"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs30" />
+  <sodipodi:namedview
+     id="namedview28"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.67529297"
+     inkscape:cx="855.9248"
+     inkscape:cy="220.64497"
+     inkscape:window-width="1920"
+     inkscape:window-height="1035"
+     inkscape:window-x="0"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg26" />
+  <g
+     fill="#ff4000"
+     id="g22"
+     transform="translate(0.042,-0.047)">
+    <path
+       d="m 375.1,151.7 c 0,41.7 -36.5,75.6 -81.3,75.6 -13.7,0 -27.8,-0.1 -42.1,-0.1 -62.9,-0.3 -128,-0.5 -184.5,3.7 l -5.9,0.4 V 120.7 C 61.3,79 97.8,45.1 142.6,45.1 h 151.2 c 44.8,0 81.3,33.9 81.3,75.6 z M 293.8,-22.6 H 142.6 c -82.5,0 -149.7,62 -149.7,138.1 V 305 c 19.8,-3 89.1,-10.2 300.9,-10 41.8,0 80,-14.4 107.6,-40.5 27,-25.3 42.2,-60.7 42,-97.6 v -41.4 c 0.1,-76.2 -67,-138.1 -149.6,-138.1"
+       transform="translate(7.058,22.647)"
+       id="path18" />
+    <path
+       d="m 147.9,53.9 -36.5,0.3 C 72.6,56 41.8,87.1 40.9,125.4 v 0.6 c 13.3,-1.7 29.6,-5.2 105.4,-5.7 l 28.9,-0.3 c 38.8,-1.8 69.6,-32.9 70.5,-71.3 v -0.6 c -12.9,1.7 -28.4,5.1 -97.8,5.8"
+       transform="translate(178.888,299.937)"
+       id="path20" />
+  </g>
+</svg>
