@@ -11,8 +11,11 @@ import {
   Switch,
   Text,
   HStack,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
-import { Alert } from 'antd';
 import { FunctionComponent, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -79,13 +82,13 @@ export const EventOrderForm: FunctionComponent<IEventOrderFormProps> = ({
         {orderId != null ? 'Bestellung bearbeiten' : 'Bestellung hinzufügen'}
       </Heading>
       {error && (
-        <Alert
-          message={t('common.errors.unknown.message')}
-          description={t('common.errors.unknown.description')}
-          type="error"
-          showIcon={true}
-          closable={true}
-        />
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>{t('common.errors.unknown.message')}</AlertTitle>
+          <AlertDescription>
+            {t('common.errors.unknown.description')}
+          </AlertDescription>
+        </Alert>
       )}
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(handleEventFinish)}>

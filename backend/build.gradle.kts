@@ -69,9 +69,9 @@ tasks.withType<KotlinCompile> {
   }
 }
 
-tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
-  jvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005")
-}
+// tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+//   jvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005")
+// }
 
 configurations {
   liquibaseRuntime {

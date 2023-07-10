@@ -10,6 +10,7 @@ import de.incloud.food.model.EventRepository
 import de.incloud.food.model.Restaurant
 import de.incloud.food.model.RestaurantRepository
 import de.incloud.food.model.User
+import de.incloud.food.model.UserRepository
 import de.incloud.food.service.MailNotificationService
 import de.incloud.food.service.TeamsNotificationService
 import graphql.schema.DataFetchingEnvironment
@@ -26,6 +27,7 @@ class CreateEventMutationInput(
   val restaurant: ID,
   val description: String?,
 )
+
 class UpdateEventMutationInput(
   val id: ID,
   val name: String,
@@ -38,6 +40,7 @@ class UpdateEventMutationInput(
 class EventMutation(
   private val eventRepository: EventRepository,
   private val restaurantRepository: RestaurantRepository,
+  private val userRepository: UserRepository,
   private val teamsNotificationService: TeamsNotificationService,
   private val mailNotificationService: MailNotificationService,
   private val em: EntityManager,
@@ -111,18 +114,36 @@ class EventMutation(
     }
 
     val lottery = event.orders.filter { eventOrder -> eventOrder.availableForLottery }
+    val lotteryParticipants = lottery.map { eventOrder ->
+      eventOrder.createdBy
+    }.distinct()
 
     if (lottery.isEmpty()) {
       throw Exception("Nobody is available for lottery!")
     }
 
-    val lotteryWinner = lottery.random().createdBy
+    val groupedParticipants = lotteryParticipants.groupBy { participant -> participant.lotteryRatio() }
+    val ratioKey = groupedParticipants.keys.maxOf { it }
+    val maxRatioUsers = groupedParticipants.get(ratioKey) ?: throw Exception("Couldn't get user list for ratio.")
+
+    val lotteryWinner = maxRatioUsers.random()
+    val users = event.orders
+      .map { eventOrder -> eventOrder.createdBy }
+      .distinct()
+      .onEach {
+        it.participateCount += 1
+
+        if (it == lotteryWinner) {
+          it.hitCount += 1
+        }
+      }
 
     event.active = false
     event.updatedAt = Instant.now().epochSecond
     event.updatedBy = environment.graphQlContext.get<User>() ?: throw UnauthorizedErrorException()
     event.lotteryWinner = lotteryWinner
 
+    userRepository.saveAll(users)
     eventRepository.save(event)
 
     teamsNotificationService.sendEventClosedNotification(event, environment)

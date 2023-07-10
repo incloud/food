@@ -110,8 +110,8 @@ class TeamsNotificationService {
   }
 
   private suspend fun sendNotification(site: Site, data: AdaptiveCard) {
-    val url = site.teamsWebhookUrl
-    if (url == null) {
+    val urls = site.webhooks.map { webhook -> webhook.url }
+    if (urls.isEmpty()) {
       logger.info("Not sending teams notification, because site \"${site.name}\" has no webhook url configured.")
       return
     }
@@ -123,17 +123,19 @@ class TeamsNotificationService {
 
     logger.info("Sending teams notification, for site \"${site.name}\": $body")
 
-    try {
-      WebClient
-        .create(url)
-        .post()
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-        .body(BodyInserters.fromValue(body))
-        .retrieve()
-        .awaitBodilessEntity()
-    } catch (e: Exception) {
-      logger.error("Error sending notification to teams for site \"${site.name}\"", e)
+    for (url in urls) {
+      try {
+        WebClient
+          .create(url)
+          .post()
+          .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+          .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+          .body(BodyInserters.fromValue(body))
+          .retrieve()
+          .awaitBodilessEntity()
+      } catch (e: Exception) {
+        logger.error("Error sending notification to teams for site \"${site.name}\"", e)
+      }
     }
   }
 }

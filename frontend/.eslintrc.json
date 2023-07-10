@@ -1,8 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "incloud/react"
-  ],
+  "extends": ["incloud/react"],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -19,19 +17,12 @@
     "node": true,
     "es2020": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react-refresh",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "react-refresh", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "ignorePatterns": [
-    "types.generated.ts",
-    "public/**"
-  ],
+  "ignorePatterns": ["types.generated.ts", "public/**"],
   "rules": {
     "react-refresh/only-export-components": "warn",
     "react/prop-types": "off",
@@ -42,9 +33,6 @@
         "varsIgnorePattern": "^_"
       }
     ],
-    "arrow-body-style": [
-      "error",
-      "as-needed"
-    ]
+    "arrow-body-style": ["error", "as-needed"]
   }
 }

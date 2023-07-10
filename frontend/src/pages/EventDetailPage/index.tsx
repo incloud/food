@@ -22,8 +22,8 @@ import {
   Spacer,
   VStack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
-import { notification } from 'antd';
 import {
   FunctionComponent,
   useEffect,
@@ -51,6 +51,7 @@ import { useCurrentUserQuery } from '~/gql/user.generated';
 
 export const EventDetailPage: FunctionComponent = () => {
   const { t } = useTranslation();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
   const { data, loading, error, refetch } = useEventQuery({
     variables: { id: id || '' },
@@ -70,13 +71,15 @@ export const EventDetailPage: FunctionComponent = () => {
   const [updateOrderId, setUpdateOrderId] = useState<string | null>(null);
   useEffect(() => {
     if (deleteError || lotteryError) {
-      notification.error({
-        message: deleteError
+      toast({
+        title: deleteError
           ? t('pages.events.eventDetail.errors.deleteOrder')
           : t('pages.events.eventDetail.errors.lottery'),
+        status: 'error',
+        isClosable: true,
       });
     }
-  }, [deleteError, lotteryError, t]);
+  }, [deleteError, lotteryError, t, toast]);
 
   const handleLotteryStart = useCallback(
     async (startId: string) => {
@@ -94,7 +97,7 @@ export const EventDetailPage: FunctionComponent = () => {
     [deleteOrder, refetch],
   );
 
-  const anyoneAvailabeForLottery = useMemo(() => {
+  const anyoneAvailableForLottery = useMemo(() => {
     if (!data?.event?.orders) {
       return false;
     }
@@ -152,7 +155,9 @@ export const EventDetailPage: FunctionComponent = () => {
                         onClick={() => void handleLotteryStart(id)}
                         isLoading={lotteryLoading}
                         disabled={
-                          lotteryLoading || loading || !anyoneAvailabeForLottery
+                          lotteryLoading ||
+                          loading ||
+                          !anyoneAvailableForLottery
                         }
                       >
                         {t('pages.events.eventDetail.startLottery')}

@@ -5,9 +5,15 @@ import {
   AlertTitle,
   Button,
   ButtonGroup,
+  Popover,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
-import { notification, Popconfirm } from 'antd';
 import { useState, FunctionComponent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,6 +32,7 @@ import { RestaurantForm } from '~/pages/RestaurantsPage/components/RestaurantFor
 
 export const RestaurantDetailPage: FunctionComponent = () => {
   const { t } = useTranslation();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, loading, error, refetch } = useRestaurantQuery({
@@ -46,17 +53,21 @@ export const RestaurantDetailPage: FunctionComponent = () => {
     try {
       await deleteRestaurant();
     } catch {
-      notification.error(t('common.errors.unknown', { returnObjects: true }));
+      toast({
+        title: t('common.errors.unknown', { returnObjects: true }),
+        status: 'error',
+      });
       return;
     }
 
     navigate(paths.restaurants);
-    notification.success(
-      t('pages.restaurantDetail.deleteSuccess', {
+    toast({
+      title: t('pages.restaurantDetail.deleteSuccess', {
         returnObjects: true,
       }),
-    );
-  }, [deleteRestaurant, navigate, t]);
+      status: 'success',
+    });
+  }, [deleteRestaurant, navigate, t, toast]);
 
   if (error) {
     return <ErrorUnknownPage />;
@@ -88,16 +99,34 @@ export const RestaurantDetailPage: FunctionComponent = () => {
             >
               {t('pages.restaurantDetail.edit')}
             </Button>
-            <Popconfirm
-              title={t('pages.restaurantDetail.deleteConfirmation')}
-              okText={t('common.yes')}
-              cancelText={t('common.no')}
-              onConfirm={() => void handleDeleteConfirm}
-            >
-              <Button leftIcon={<DeleteOutlined />}>
-                {t('pages.restaurantDetail.delete')}
-              </Button>
-            </Popconfirm>{' '}
+            <Popover placement="bottom-end">
+              {({ onClose }) => (
+                <>
+                  <PopoverTrigger>
+                    <Button leftIcon={<DeleteOutlined />}>
+                      {t('pages.restaurantDetail.delete')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                      {t('pages.restaurantDetail.deleteConfirmation')}
+                    </PopoverHeader>
+                    <PopoverFooter>
+                      <ButtonGroup>
+                        <Button onClick={onClose}>{t('common.no')}</Button>
+                        <Button
+                          colorScheme="brand"
+                          onClick={void handleDeleteConfirm}
+                        >
+                          {t('common.yes')}
+                        </Button>
+                      </ButtonGroup>
+                    </PopoverFooter>
+                  </PopoverContent>
+                </>
+              )}
+            </Popover>
           </ButtonGroup>
         )}
       </PageTitle>

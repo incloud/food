@@ -1,0 +1,43 @@
+databaseChangeLog:
+- changeSet:
+    id: 1688740569864-9
+    author: root (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: webhookPK
+            name: id
+            type: BINARY(16)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: url
+            type: VARCHAR(1500)
+        - column:
+            constraints:
+              nullable: false
+            name: site_id
+            type: BINARY(16)
+        tableName: webhook
+- changeSet:
+    id: 1688740569864-10
+    author: root (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            defaultValueNumeric: 0
+            name: hit_count
+            type: bigint
+        tableName: user

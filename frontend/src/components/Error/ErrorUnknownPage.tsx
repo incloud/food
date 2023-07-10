@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorPage } from './ErrorPage';
