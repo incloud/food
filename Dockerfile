@@ -35,6 +35,9 @@ RUN yarn run gql-gen && yarn run build
 # -----------------------------------------------------
 
 FROM backend-build as backend-jar
+
+WORKDIR /var/app/backend
+
 COPY --from=frontend-build /var/app/frontend/dist/ src/main/resources/static/
 # Now we can build the Jar again, including the frontend
 RUN gradle bootJar
@@ -42,6 +45,7 @@ RUN gradle bootJar
 # -----------------------------------------------------
 
 FROM amazoncorretto:17.0.5-alpine3.16
+
 WORKDIR /var/app
 COPY --from=backend-jar /var/app/backend/build/libs/food-0.0.1-SNAPSHOT.jar app.jar
 USER 2000:2000
