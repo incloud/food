@@ -136,7 +136,7 @@ export const en = {
         createSiteButton: 'Create $t(common.site)',
       },
       siteDetail: {
-        editButton: 'Edit $(common.site)',
+        editButton: 'Edit $t(common.site)',
       },
     },
   },
