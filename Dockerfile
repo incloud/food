@@ -13,21 +13,20 @@ COPY backend/src src
 COPY .editorconfig ..
 
 # We first need the GraphQL schema to be able to generate the frontend code based on it
-RUN gradle graphqlGenerateSDL
+RUN gradle graphqlGenerateSDL && cp ./build/schema.graphql ./schema.graphql
 
 # -----------------------------------------------------
 
-FROM node:20.2.0-alpine3.17 as frontend-build
+FROM node:20.4.0-alpine3.18 as frontend-build
 
 WORKDIR /var/app/frontend
 
 COPY frontend/package.json .
 COPY frontend/yarn.lock .
 
-# TODO: Fix
 RUN yarn install --force
 
-COPY --from=backend-build /var/app/backend/build/schema.graphql .
+COPY --from=backend-build /var/app/backend/schema.graphql .
 COPY frontend/ .
 
 RUN yarn run gql-gen && yarn run build
@@ -37,8 +36,10 @@ RUN yarn run gql-gen && yarn run build
 FROM backend-build as backend-jar
 
 WORKDIR /var/app/backend
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.logging.level=info -Dorg.gradle.parallel=true"
+ENV GRADLE_USER_HOME=/tmp/gradle
 
-COPY --from=frontend-build /var/app/frontend/dist/ src/main/resources/static/
+COPY --from=frontend-build var/app/frontend/dist/ ./src/main/resources/static/
 # Now we can build the Jar again, including the frontend
 RUN gradle bootJar
 
