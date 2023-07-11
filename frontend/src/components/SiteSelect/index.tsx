@@ -46,6 +46,7 @@ export const SiteSelect: FunctionComponent<ISiteSelectProps> = ({
 
   return (
     <Select
+      minWidth="13.75rem"
       placeholder={t('components.siteSelect.dropdownPlaceholder')}
       disabled={loading}
       value={userData?.user.site?.id}
