@@ -83,7 +83,7 @@ export const SiteListPage: FunctionComponent = () => {
                   <Td>
                     <List>
                       {site.webhooks.map(webhook => (
-                        <ListItem>{webhook.name}</ListItem>
+                        <ListItem key={webhook.id}>{webhook.name}</ListItem>
                       ))}
                     </List>
                   </Td>

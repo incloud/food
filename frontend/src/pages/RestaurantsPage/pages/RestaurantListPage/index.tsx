@@ -94,7 +94,7 @@ export const RestaurantListPage: FunctionComponent = () => {
           </Thead>
           <Tbody>
             {data?.restaurants.map(item => (
-              <Tr>
+              <Tr key={item.id}>
                 <Td>
                   <Link as={RouterLink} to={paths.restaurant(item.id)}>
                     {item.name}
