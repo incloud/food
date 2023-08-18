@@ -2,6 +2,7 @@ export const en = {
   translation: {
     common: {
       errors: {
+        pageHeader: 'An Error occurred',
         notFound: {
           message: 'Not found',
           description: 'We could not find the selected element.',

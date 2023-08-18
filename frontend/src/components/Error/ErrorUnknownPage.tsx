@@ -7,7 +7,6 @@ export const ErrorUnknownPage: FunctionComponent = () => {
   const { t } = useTranslation();
   return (
     <ErrorPage>
-      <p>{t('common.errors.unknown.description')}</p>
       <p>
         <Button onClick={() => window.location.reload()}>
           {t('components.error.retry')}

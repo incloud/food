@@ -4,6 +4,7 @@ export const de: typeof en = {
   translation: {
     common: {
       errors: {
+        pageHeader: 'Ein Fehler ist aufgetreten',
         notFound: {
           message: 'Nicht gefunden',
           description: 'Wir konnten das ausgewählte Element nicht finden.',
