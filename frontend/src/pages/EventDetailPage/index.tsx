@@ -278,7 +278,7 @@ export const EventDetailPage: FunctionComponent = () => {
                       </HStack>
                     )}
                   </Box>
-                  <DescriptionItem label="Bestellung" direction="column">
+                  <DescriptionItem label={t('common.order')} direction="column">
                     <Text fontSize="2xl">{item.text}</Text>
                   </DescriptionItem>
                 </VStack>

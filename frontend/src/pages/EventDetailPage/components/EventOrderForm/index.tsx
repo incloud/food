@@ -79,7 +79,11 @@ export const EventOrderForm: FunctionComponent<IEventOrderFormProps> = ({
   return (
     <Box>
       <Heading as="h4" size="md">
-        {orderId != null ? 'Bestellung bearbeiten' : 'Bestellung hinzufügen'}
+        {t(
+          `pages.events.eventDetail.eventOrderForm.${
+            orderId != null ? 'editOrderTitle' : 'addOrderTitle'
+          }`,
+        )}
       </Heading>
       {error && (
         <Alert status="error">
@@ -105,13 +109,17 @@ export const EventOrderForm: FunctionComponent<IEventOrderFormProps> = ({
           <FormControl>
             <Text>
               {t(
-                'pages.events.eventDetail.eventOrderForm.availableForLotteryLabel',
+                'pages.events.eventDetail.eventOrderForm.availableForLotteryHint',
               )}
             </Text>
           </FormControl>
           <FormControl>
             <HStack>
-              <FormLabel>Verfügbar für Auslosung</FormLabel>
+              <FormLabel>
+                {t(
+                  'pages.events.eventDetail.eventOrderForm.availableForLotteryLabel',
+                )}
+              </FormLabel>
               <Switch {...register('availableForLottery')} />
             </HStack>
           </FormControl>

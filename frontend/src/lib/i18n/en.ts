@@ -85,11 +85,14 @@ export const en = {
         },
         eventDetail: {
           eventOrderForm: {
+            addOrderTitle: 'Add $t(common.order)',
+            editOrderTitle: 'Edit $t(common.order)',
             textLabel: '$t(common.order)',
             textRequiredMessage:
               'Please enter your $t(common.order, lowercase)',
-            availableForLotteryLabel:
+            availableForLotteryHint:
               'Are you available to place the $t(common.order, lowercase)? One person will be randomly selected to do this.',
+            availableForLotteryLabel: 'Available for $t(common.lottery)',
           },
           eventDescriptions: {
             title: 'Information',

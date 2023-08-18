@@ -87,10 +87,13 @@ export const de: typeof en = {
         },
         eventDetail: {
           eventOrderForm: {
+            addOrderTitle: '$t(common.order) hinzufügen',
+            editOrderTitle: 'Edit $t(common.order) bearbeiten',
             textLabel: '$t(common.order)',
             textRequiredMessage: 'Bitte gib deine $t(common.order) ein',
-            availableForLotteryLabel:
+            availableForLotteryHint:
               'Kannst du die $t(common.order) aufgeben? Eine Person wird zufällig ausgewählt, um die $t(common.order) aufzugeben.',
+            availableForLotteryLabel: 'Verfügbar für $t(common.lottery)',
           },
           eventDescriptions: {
             title: 'Informationen',
