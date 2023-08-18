@@ -92,7 +92,8 @@ export const en = {
               'Please enter your $t(common.order, lowercase)',
             availableForLotteryHint:
               'Are you available to place the $t(common.order, lowercase)? One person will be randomly selected to do this.',
-            availableForLotteryLabel: 'Available for $t(common.lottery)',
+            availableForLotteryLabel:
+              'Available for $t(common.lottery, lowercase)',
           },
           eventDescriptions: {
             title: 'Information',
@@ -111,8 +112,8 @@ export const en = {
             reactivateEvent:
               'Could not reactivate $t(common.event, lowercase)!',
           },
-          addOrder: 'Add $t(common.order)',
-          startLottery: 'Start $t(common.lottery)',
+          addOrder: 'Add $t(common.order, lowercase)',
+          startLottery: 'Start $t(common.lottery, lowercase)',
           deleteOrderTitle: 'Not hungry anymore?',
           deleteOrderOkButton: 'Yes',
           deleteOrderCancelButton: 'No',
@@ -137,13 +138,13 @@ export const en = {
         },
       },
       restaurantList: {
-        createRestaurantButton: 'Create $t(common.restaurant)',
+        createRestaurantButton: 'Create $t(common.restaurant, lowercase)',
       },
       siteList: {
-        createSiteButton: 'Create $t(common.site)',
+        createSiteButton: 'Create $t(common.site, lowercase)',
       },
       siteDetail: {
-        editButton: 'Edit $t(common.site)',
+        editButton: 'Edit $t(common.site, lowercase)',
       },
     },
   },
