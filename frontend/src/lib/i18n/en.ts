@@ -108,20 +108,23 @@ export const en = {
           errors: {
             deleteOrder: 'Could not delete your $t(common.order, lowercase)!',
             lottery: 'Could not start $t(common.lottery, lowercase)!',
+            reactivateEvent:
+              'Could not reactivate $t(common.event, lowercase)!',
           },
           addOrder: 'Add $t(common.order)',
           startLottery: 'Start $t(common.lottery)',
           deleteOrderTitle: 'Not hungry anymore?',
           deleteOrderOkButton: 'Yes',
           deleteOrderCancelButton: 'No',
-          editEvent: 'Edit event',
+          editEvent: 'Edit $t(common.event, lowercase)',
+          reactivateEvent: 'Reactivate $t(common.event, lowercase)',
         },
         eventList: {
           title: '$t(common.event_plural)',
           searchPlaceholder: 'Name',
-          createEventButton: 'Create $t(common.event)',
-          loadMoreButton: 'Load More',
-          gotoButton: 'Go to event',
+          createEventButton: 'Create $t(common.event, lowercase)',
+          loadMoreButton: 'Load more',
+          gotoButton: 'Go to $t(common.event, lowercase)',
         },
       },
       restaurantDetail: {

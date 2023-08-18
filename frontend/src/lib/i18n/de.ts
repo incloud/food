@@ -109,20 +109,23 @@ export const de: typeof en = {
           errors: {
             deleteOrder: '$t(common.order) konnte nicht gelöscht werden!',
             lottery: '$t(common.lottery) konnte nicht gestartet werden!',
+            reactivateEvent:
+              '$t(common.event) konnte nicht reaktiviert werden!',
           },
           addOrder: '$t(common.order) hinzufügen',
           startLottery: '$t(common.lottery) starten',
           deleteOrderTitle: 'Nicht mehr hungrig?',
           deleteOrderOkButton: 'Ja',
           deleteOrderCancelButton: 'Nein',
-          editEvent: 'Event bearbeiten',
+          editEvent: '$t(common.event) bearbeiten',
+          reactivateEvent: '$t(common.event) reaktivieren',
         },
         eventList: {
           title: 'Events',
           searchPlaceholder: 'Name',
           createEventButton: '$t(common.event) erstellen',
           loadMoreButton: 'Mehr laden',
-          gotoButton: 'Zum Event',
+          gotoButton: 'Zum $t(common.event)',
         },
       },
       restaurantDetail: {
