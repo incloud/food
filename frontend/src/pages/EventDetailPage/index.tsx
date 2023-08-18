@@ -218,6 +218,10 @@ export const EventDetailPage: FunctionComponent = () => {
                 void refetch();
               }}
               onCancel={() => setCreateOrderFormOpen(false)}
+              initialValues={{
+                availableForLottery: true,
+                text: '',
+              }}
             />
           )}
           <List>
