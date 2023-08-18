@@ -17,7 +17,4 @@ const baseStyle = helpers.definePartsStyle(props => ({
 
 export const Input = helpers.defineMultiStyleConfig({
   baseStyle,
-  defaultProps: {
-    size: 'lg',
-  },
 });
