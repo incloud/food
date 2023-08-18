@@ -119,6 +119,8 @@ export const de: typeof en = {
           deleteOrderCancelButton: 'Nein',
           editEvent: '$t(common.event) bearbeiten',
           reactivateEvent: '$t(common.event) reaktivieren',
+          userLotteryRatioDescription:
+            "Aktuelle $t(common.lottery)rate ist {{lotteryRatio}} ({{participateCount}} teilnahmen / {{hitCount}} '$t(common.lottery)ssiege')\n\nDer Teilnehmer mit der höchsten $t(common.lottery)rate innerhalb der $t(common.event)teilnehmer, die für die $t(common.lottery) verfügbar sind, 'gewinnt' die $t(common.lottery). Falls zwei Teilnehmer die gleiche Zahl haben wird es ausgewürfelt. Diese Funktion sorgt dafür dass jeder im selben Verhältnis ausgewählt wird.",
         },
         eventList: {
           title: 'Events',

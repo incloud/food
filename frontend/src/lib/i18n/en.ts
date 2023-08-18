@@ -119,6 +119,8 @@ export const en = {
           deleteOrderCancelButton: 'No',
           editEvent: 'Edit $t(common.event, lowercase)',
           reactivateEvent: 'Reactivate $t(common.event, lowercase)',
+          userLotteryRatioDescription:
+            "Current $t(common.lottery, lowercase) ratio is {{lotteryRatio}} ({{participateCount}} participations / {{hitCount}} $t(common.lottery, lowercase) 'wins')\n\nThe participant with the highest $t(common.lottery, lowercase) ratio within the $t(common.event_plural) available participants 'wins' the $t(common.lottery, lowercase). In case of two participants have the same ratio, the dice are rolled. This feature will take care that everyone will be selected in the same ratio.",
         },
         eventList: {
           title: '$t(common.event_plural)',

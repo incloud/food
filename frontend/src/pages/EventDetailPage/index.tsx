@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
 import {
   Avatar,
   Box,
@@ -321,6 +326,17 @@ export const EventDetailPage: FunctionComponent = () => {
                           )}
                         </Box>
                         <Box>{item.createdBy.fullName}</Box>
+                        <InfoCircleOutlined
+                          title={t(
+                            'pages.events.eventDetail.userLotteryRatioDescription',
+                            {
+                              participateCount: item.createdBy.participateCount,
+                              hitCount: item.createdBy.hitCount,
+                              lotteryRatio:
+                                item.createdBy.lotteryRatio.toFixed(2),
+                            },
+                          )}
+                        />
                       </HStack>
                     )}
                   </Box>
