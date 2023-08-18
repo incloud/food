@@ -1,4 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
+import { fonts } from './Fonts';
 import { ButtonGroup } from '~/theme/ButtonGroup';
 import { Divider } from '~/theme/Divider';
 import { Heading } from '~/theme/Heading';
@@ -36,6 +37,7 @@ export const theme = extendTheme({
   config,
   styles,
   components,
+  fonts,
   colors: {
     brand: {
       50: '#FFECE5',
