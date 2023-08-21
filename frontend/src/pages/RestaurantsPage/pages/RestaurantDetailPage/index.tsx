@@ -117,7 +117,8 @@ export const RestaurantDetailPage: FunctionComponent = () => {
                         <Button onClick={onClose}>{t('common.no')}</Button>
                         <Button
                           colorScheme="brand"
-                          onClick={void handleDeleteConfirm}
+                          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                          onClick={handleDeleteConfirm}
                         >
                           {t('common.yes')}
                         </Button>

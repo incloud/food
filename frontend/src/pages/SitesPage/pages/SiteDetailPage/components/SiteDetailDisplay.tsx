@@ -21,7 +21,7 @@ export const SiteDetailDisplay: FunctionComponent<ISiteDetailDisplayProps> = ({
       <Heading as="h3">{t('common.webhook_plural')}</Heading>
       <List>
         {site.webhooks.map(webhook => (
-          <ListItem>
+          <ListItem key={webhook.id}>
             {webhook.name} ({webhook.url})
           </ListItem>
         ))}

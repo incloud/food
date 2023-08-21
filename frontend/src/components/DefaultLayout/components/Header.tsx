@@ -58,7 +58,7 @@ export const Header: FunctionComponent<IHeaderProps> = ({ user }) => {
               {user ? (
                 <HStack>
                   <Box>
-                    <Text>
+                    <Text fontWeight="bold">
                       {t('components.layout.greeting', {
                         name: user.fullName,
                       })}

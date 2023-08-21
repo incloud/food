@@ -43,6 +43,9 @@ query event($id: ID!) {
         id
         fullName
         avatarUrl
+        participateCount
+        hitCount
+        lotteryRatio
       }
     }
   }

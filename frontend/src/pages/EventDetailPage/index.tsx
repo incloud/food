@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
 import {
   Avatar,
   Box,
@@ -43,6 +48,7 @@ import { DescriptionItem } from '~/components/DescriptionItem';
 import { Error404Page } from '~/components/Error/Error404Page';
 import { ErrorUnknownPage } from '~/components/Error/ErrorUnknownPage';
 import { EventForm } from '~/components/EventForm';
+import { useUpdateEventMutation } from '~/components/EventForm/gql/updateEvent.generated';
 import { GreenCheckMark, RedStopSign } from '~/components/Icons';
 import { LoadingPage } from '~/components/LoadingPage';
 import { PageTitle } from '~/components/PageTitle';
@@ -65,21 +71,38 @@ export const EventDetailPage: FunctionComponent = () => {
     useDeleteEventOrderMutation();
   const [startLottery, { loading: lotteryLoading, error: lotteryError }] =
     useStartEventLotteryMutation();
+  const [updateEvent, { loading: updateLoading, error: updateError }] =
+    useUpdateEventMutation();
 
   const [updateEventFormOpen, setUpdateEventFormOpen] = useState(false);
   const [createOrderFormOpen, setCreateOrderFormOpen] = useState(false);
   const [updateOrderId, setUpdateOrderId] = useState<string | null>(null);
+
   useEffect(() => {
-    if (deleteError || lotteryError) {
-      toast({
-        title: deleteError
-          ? t('pages.events.eventDetail.errors.deleteOrder')
-          : t('pages.events.eventDetail.errors.lottery'),
-        status: 'error',
-        isClosable: true,
-      });
+    if (deleteError || lotteryError || updateError) {
+      let titleKey = '';
+      switch (true) {
+        case !!deleteError:
+          titleKey = 'deleteOrder';
+          break;
+        case !!lotteryError:
+          titleKey = 'lottery';
+          break;
+        case !!updateError:
+          titleKey = 'reactivateEvent';
+          break;
+        default:
+      }
+
+      if (titleKey) {
+        toast({
+          title: t(`pages.events.eventDetail.errors.${titleKey}`),
+          status: 'error',
+          isClosable: true,
+        });
+      }
     }
-  }, [deleteError, lotteryError, t, toast]);
+  }, [deleteError, lotteryError, t, toast, updateError]);
 
   const handleLotteryStart = useCallback(
     async (startId: string) => {
@@ -123,10 +146,34 @@ export const EventDetailPage: FunctionComponent = () => {
         <Box>
           <Button
             colorScheme="brand"
-            leftIcon={<EditOutlined />}
-            onClick={() => setUpdateEventFormOpen(true)}
+            {...(data.event.active
+              ? {
+                  onClick: () => setUpdateEventFormOpen(true),
+                  leftIcon: <EditOutlined />,
+                }
+              : {
+                  //  eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick: () =>
+                    data.event &&
+                    updateEvent({
+                      variables: {
+                        input: {
+                          restaurant: data.event.restaurant.id,
+                          name: data.event.name,
+                          description: data.event.description,
+                          id: data.event.id,
+                          active: true,
+                        },
+                      },
+                    }),
+                  isLoading: updateLoading,
+                })}
           >
-            {t('pages.events.eventDetail.editEvent')}
+            {t(
+              `pages.events.eventDetail.${
+                data.event.active ? 'edit' : 'reactivate'
+              }Event`,
+            )}
           </Button>
         </Box>
       </PageTitle>
@@ -176,6 +223,10 @@ export const EventDetailPage: FunctionComponent = () => {
                 void refetch();
               }}
               onCancel={() => setCreateOrderFormOpen(false)}
+              initialValues={{
+                availableForLottery: true,
+                text: '',
+              }}
             />
           )}
           <List>
@@ -275,10 +326,21 @@ export const EventDetailPage: FunctionComponent = () => {
                           )}
                         </Box>
                         <Box>{item.createdBy.fullName}</Box>
+                        <InfoCircleOutlined
+                          title={t(
+                            'pages.events.eventDetail.userLotteryRatioDescription',
+                            {
+                              participateCount: item.createdBy.participateCount,
+                              hitCount: item.createdBy.hitCount,
+                              lotteryRatio:
+                                item.createdBy.lotteryRatio.toFixed(2),
+                            },
+                          )}
+                        />
                       </HStack>
                     )}
                   </Box>
-                  <DescriptionItem label="Bestellung" direction="column">
+                  <DescriptionItem label={t('common.order')} direction="column">
                     <Text fontSize="2xl">{item.text}</Text>
                   </DescriptionItem>
                 </VStack>

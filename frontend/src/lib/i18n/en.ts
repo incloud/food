@@ -2,6 +2,7 @@ export const en = {
   translation: {
     common: {
       errors: {
+        pageHeader: 'An Error occurred',
         notFound: {
           message: 'Not found',
           description: 'We could not find the selected element.',
@@ -84,11 +85,15 @@ export const en = {
         },
         eventDetail: {
           eventOrderForm: {
+            addOrderTitle: 'Add $t(common.order)',
+            editOrderTitle: 'Edit $t(common.order)',
             textLabel: '$t(common.order)',
             textRequiredMessage:
               'Please enter your $t(common.order, lowercase)',
-            availableForLotteryLabel:
+            availableForLotteryHint:
               'Are you available to place the $t(common.order, lowercase)? One person will be randomly selected to do this.',
+            availableForLotteryLabel:
+              'Available for $t(common.lottery, lowercase)',
           },
           eventDescriptions: {
             title: 'Information',
@@ -104,20 +109,25 @@ export const en = {
           errors: {
             deleteOrder: 'Could not delete your $t(common.order, lowercase)!',
             lottery: 'Could not start $t(common.lottery, lowercase)!',
+            reactivateEvent:
+              'Could not reactivate $t(common.event, lowercase)!',
           },
-          addOrder: 'Add $t(common.order)',
-          startLottery: 'Start $t(common.lottery)',
+          addOrder: 'Add $t(common.order, lowercase)',
+          startLottery: 'Start $t(common.lottery, lowercase)',
           deleteOrderTitle: 'Not hungry anymore?',
           deleteOrderOkButton: 'Yes',
           deleteOrderCancelButton: 'No',
-          editEvent: 'Edit event',
+          editEvent: 'Edit $t(common.event, lowercase)',
+          reactivateEvent: 'Reactivate $t(common.event, lowercase)',
+          userLotteryRatioDescription:
+            "Current $t(common.lottery, lowercase) ratio is {{lotteryRatio}} ({{participateCount}} participations / {{hitCount}} $t(common.lottery, lowercase) 'wins')\n\nThe participant with the highest $t(common.lottery, lowercase) ratio within the $t(common.event_plural) available participants 'wins' the $t(common.lottery, lowercase). In case of two participants have the same ratio, the dice are rolled. This feature will take care that everyone will be selected in the same ratio.",
         },
         eventList: {
           title: '$t(common.event_plural)',
           searchPlaceholder: 'Name',
-          createEventButton: 'Create $t(common.event)',
-          loadMoreButton: 'Load More',
-          gotoButton: 'Go to event',
+          createEventButton: 'Create $t(common.event, lowercase)',
+          loadMoreButton: 'Load more',
+          gotoButton: 'Go to $t(common.event, lowercase)',
         },
       },
       restaurantDetail: {
@@ -130,13 +140,13 @@ export const en = {
         },
       },
       restaurantList: {
-        createRestaurantButton: 'Create $t(common.restaurant)',
+        createRestaurantButton: 'Create $t(common.restaurant, lowercase)',
       },
       siteList: {
-        createSiteButton: 'Create $t(common.site)',
+        createSiteButton: 'Create $t(common.site, lowercase)',
       },
       siteDetail: {
-        editButton: 'Edit $t(common.site)',
+        editButton: 'Edit $t(common.site, lowercase)',
       },
     },
   },

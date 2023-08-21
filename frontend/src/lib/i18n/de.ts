@@ -4,6 +4,7 @@ export const de: typeof en = {
   translation: {
     common: {
       errors: {
+        pageHeader: 'Ein Fehler ist aufgetreten',
         notFound: {
           message: 'Nicht gefunden',
           description: 'Wir konnten das ausgewählte Element nicht finden.',
@@ -86,10 +87,13 @@ export const de: typeof en = {
         },
         eventDetail: {
           eventOrderForm: {
+            addOrderTitle: '$t(common.order) hinzufügen',
+            editOrderTitle: 'Edit $t(common.order) bearbeiten',
             textLabel: '$t(common.order)',
             textRequiredMessage: 'Bitte gib deine $t(common.order) ein',
-            availableForLotteryLabel:
+            availableForLotteryHint:
               'Kannst du die $t(common.order) aufgeben? Eine Person wird zufällig ausgewählt, um die $t(common.order) aufzugeben.',
+            availableForLotteryLabel: 'Verfügbar für $t(common.lottery)',
           },
           eventDescriptions: {
             title: 'Informationen',
@@ -105,20 +109,25 @@ export const de: typeof en = {
           errors: {
             deleteOrder: '$t(common.order) konnte nicht gelöscht werden!',
             lottery: '$t(common.lottery) konnte nicht gestartet werden!',
+            reactivateEvent:
+              '$t(common.event) konnte nicht reaktiviert werden!',
           },
           addOrder: '$t(common.order) hinzufügen',
           startLottery: '$t(common.lottery) starten',
           deleteOrderTitle: 'Nicht mehr hungrig?',
           deleteOrderOkButton: 'Ja',
           deleteOrderCancelButton: 'Nein',
-          editEvent: 'Event bearbeiten',
+          editEvent: '$t(common.event) bearbeiten',
+          reactivateEvent: '$t(common.event) reaktivieren',
+          userLotteryRatioDescription:
+            "Aktuelle $t(common.lottery)rate ist {{lotteryRatio}} ({{participateCount}} teilnahmen / {{hitCount}} '$t(common.lottery)ssiege')\n\nDer Teilnehmer mit der höchsten $t(common.lottery)rate innerhalb der $t(common.event)teilnehmer, die für die $t(common.lottery) verfügbar sind, 'gewinnt' die $t(common.lottery). Falls zwei Teilnehmer die gleiche Zahl haben wird es ausgewürfelt. Diese Funktion sorgt dafür dass jeder im selben Verhältnis ausgewählt wird.",
         },
         eventList: {
           title: 'Events',
           searchPlaceholder: 'Name',
           createEventButton: '$t(common.event) erstellen',
           loadMoreButton: 'Mehr laden',
-          gotoButton: 'Zum Event',
+          gotoButton: 'Zum $t(common.event)',
         },
       },
       restaurantDetail: {
